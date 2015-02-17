@@ -4,15 +4,15 @@ Work in progress
 
 Synching:
 
-<blockquote>
+<shell>
 git init
 git remote add origin https://github.com/AIeq/WWWService
 git remote -v
 git pull
-</blockquote>
+</shell>
 
 Running:
 
-<blockquote>
+<shell>
 manage.py runserver
-</blockquote>
+</shell>
