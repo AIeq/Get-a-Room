@@ -1,8 +1,8 @@
 # Get-a-Room
 
-**Work in progress**
 
-Web service for workspace reservation.
+
+Web service for workspace reservation. **Work in progress**
 
 
 Synching:
