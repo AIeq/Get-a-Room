@@ -4,6 +4,7 @@
 
 Web service for workspace reservation. **Work in progress**
 
+Requires Python version 2.6.6 or 2.7 and Django version 1.4.5
 
 Synching:
 
@@ -17,5 +18,5 @@ git pull
 Running:
 
 ```
-manage.py runserver
+python manage.py runserver
 ```
