@@ -1,8 +1,6 @@
 # Get-a-Room
 
-<p><font color="red"> 
-Work in progress
-</font> </p>
+**Work in progress**
 
 Web service for workspace reservation.
 
