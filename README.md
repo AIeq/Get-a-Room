@@ -1,5 +1,10 @@
-# WWWService
+# Get-a-Room
+
+```
 Work in progress
+```
+
+Web service for workspace reservation.
 
 
 Synching:
