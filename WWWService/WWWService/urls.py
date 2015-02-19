@@ -5,6 +5,9 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+
+      url(r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}),
+
     # Examples:
     # url(r'^$', 'WWWService.views.home', name='home'),
     # url(r'^WWWService/', include('WWWService.foo.urls')),
