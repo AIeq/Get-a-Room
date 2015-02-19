@@ -18,5 +18,6 @@ git pull origin master
 Running:
 
 ```
+cd WWWService
 python manage.py runserver
 ```
