@@ -10,7 +10,7 @@ Synching:
 
 ```
 git init
-git remote add origin https://github.com/AIeq/WWWService
+git remote add origin https://github.com/AIeq/Get-a-Room
 git remote -v
 git pull origin master
 ```
