@@ -74,6 +74,10 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    os.path.join(STATIC_ROOT, 'css'),
+    os.path.join(STATIC_ROOT, 'bootstrap-3.3.2-dist'),
+    os.path.join(STATIC_ROOT, 'bootstrap-3.3.2-dist', 'css'),
+    os.path.join(STATIC_ROOT, 'bootstrap-3.3.2-dist', 'js'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
