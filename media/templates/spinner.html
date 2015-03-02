@@ -1,0 +1,17 @@
+<div class="row" style=>
+  <div class="col-md-8 col-md-offset-2">
+    <div id="spinnerDiv"> </div>
+  </div>
+</div>
+{% load staticfiles %}
+<script type="text/javascript" src="{% static "js/spin.min.js" %}"></script>
+<script type="text/javascript">
+  var div = document.getElementById("spinnerDiv");
+  var addSpinner = function(){
+    div.style="margin-top: 80px";
+    new Spinner().spin(div);
+  }
+  window.onunload = function() {
+    div.childNodes = new Array();
+  }
+</script> 
