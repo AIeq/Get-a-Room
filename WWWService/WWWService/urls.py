@@ -1,12 +1,14 @@
 from django.conf.urls import patterns, include, url
+from WWWService.views import *
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-
-      url(r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}),
+      url(r"^$", 'WWWService.views.search'),
+    # static version:
+    # url(r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}),
 
     # Examples:
     # url(r'^$', 'WWWService.views.home', name='home'),
