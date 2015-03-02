@@ -10,7 +10,23 @@ import re
 import urllib2
 
 def search(request):
+  email = ''
+  time = ''
+  
   context = {}
   context.update(csrf(request))
-  context.update({'emptyResults': 1})
+  try:
+    email = request.POST.get('email')
+    time = request.POST.get('time') 
+    context.update({ 'email': email, 'time': time})
+    
+    # search
+    
+    if int(time) > 20 and int(time) < 30:
+      context.update({"OK": True, 'rooms': ['12a', '12b']})
+    else:
+      context.update({"OK": False, 'msg': 'No rooms available.'})
+    
+  except Exception as e:
+    context.update({'emptyResults': 1})
   return render(request, "index.html", context) 
