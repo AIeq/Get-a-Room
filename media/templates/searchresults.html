@@ -1,11 +1,11 @@
+{% for room in rooms %}      	
 <div class="row">
-  <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="col-md-8">
       	<div class="input-group input-group-lg">
-      	<span class="input-group-addon"><i class="fa fa-flag"></i> Room</span>
+	  <span class="input-group-addon"><i class="fa fa-flag"></i> Room {{ room }}</span>	  
       	</div>
       </div>
     </div> 
-  </div>
 </div>
+{% endfor %}
