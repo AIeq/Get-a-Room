@@ -8,8 +8,10 @@ from django.utils.translation import ugettext as _
 from django.core.context_processors import csrf
 import re
 import urllib2
+import RoomData
 
 def search(request):
+  building = 'Maarintalo'
   email = ''
   time = ''
   
@@ -23,7 +25,7 @@ def search(request):
     # search
     
     if int(time) > 20 and int(time) < 30:
-      context.update({"OK": True, 'rooms': ['12a', '12b']})
+      context.update({"OK": True, 'rooms': RoomData.getRoomData(building)})
     else:
       context.update({"OK": False, 'msg': 'No rooms available.'})
     
