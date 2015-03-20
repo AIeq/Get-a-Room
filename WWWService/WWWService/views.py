@@ -11,24 +11,36 @@ import urllib2
 import RoomData
 
 def search(request):
-  building = 'Maarintalo'
-  email = ''
-  time = ''
+  building = '' 
   
   context = {}
   context.update(csrf(request))
   try:
-    email = request.POST.get('email')
-    time = request.POST.get('time') 
-    context.update({ 'email': email, 'time': time})
-    
-    # search
-    
-    if int(time) > 20 and int(time) < 30:
-      context.update({"OK": True, 'rooms': RoomData.getRoomData(building)})
-    else:
-      context.update({"OK": False, 'msg': 'No rooms available.'})
-    
+    building = request.POST.get('building')
   except Exception as e:
-    context.update({'emptyResults': 1})
+    context.update({'building': None})
+  try:
+    email = request.POST.get('email')
+  except Exception as e:
+    email = ''
+  try:
+    time = request.POST.get('time')
+    time = int(time) 
+  except Exception as e:
+    time = 0
+  try:
+    time2 = request.POST.get('time2')
+    time2 = int(time2) 
+  except Exception as e:
+    time2 = 0
+  context.update({'building': building, 'email': email, 'time': time, 'time2': time2})
+  context.update({'noBuilding': False})
+  
+  # search
+  
+  if time > 20 and time < 30:
+    context.update({"OK": True, 'rooms': RoomData.getRoomData(building)})
+  else:
+    context.update({"OK": False, 'msg': 'No rooms available.'})
+  
   return render(request, "index.html", context) 

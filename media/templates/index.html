@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-  {% include "searchform.html" %}
-  {% include "spinner.html" %}
-  {% if not emptyResults %}
+  {% if building == None %}
+  	{% include "buildings.html" %}
+  {% else %} 
+  	{% include "searchform.html" %}
+  	{% include "spinner.html" %}
     {% if OK %}
-      {% include "searchresults.html" %}
+    	{% include "searchresults.html" %}
     {% else %}
-      {% include "searchfailure.html" %}
-    {% endif %}
+	    {% include "searchfailure.html" %}
+	{% endif %}
   {% endif %}
 {% endblock %}
