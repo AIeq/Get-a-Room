@@ -9,10 +9,11 @@ from django.core.context_processors import csrf
 import re
 import urllib2
 import RoomData
+import time as tt
 
 def search(request):
   building = '' 
-  
+  localtime = tt.localtime()
   context = {}
   context.update(csrf(request))
   try:
@@ -27,20 +28,23 @@ def search(request):
     time = request.POST.get('time')
     time = int(time) 
   except Exception as e:
-    time = 0
+    time = localtime[3];
   try:
     time2 = request.POST.get('time2')
     time2 = int(time2) 
   except Exception as e:
-    time2 = 0
-  context.update({'building': building, 'email': email, 'time': time, 'time2': time2})
+    time2 = localtime[3] + 1;
+  try:
+    day = request.POST.get('day') 
+  except Exception as e:
+    day = 'today'
+  if day is None:
+    day = 'today'
+  context.update({'building': building, 'email': email, 'time': time, 'time2': time2, 'day': day})
   context.update({'noBuilding': False})
   
-  # search
-  
-  if time > 20 and time < 30:
-    context.update({"OK": True, 'rooms': RoomData.getRoomData(building)})
-  else:
-    context.update({"OK": False, 'msg': 'No rooms available.'})
+  # no search, always send all data
+  context.update({"OK": True, 'rooms': RoomData.getRoomData(building)})
+    #context.update({"OK": False, 'msg': 'No rooms available.'})
   
   return render(request, "index.html", context) 
