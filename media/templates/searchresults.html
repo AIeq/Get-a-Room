@@ -19,7 +19,15 @@
 	    {% for insight in room.insights  %}   
 	      * {{ insight }}<br/>
 	    {% endfor %}
-		    
+	    Free times:<br/>
+	    {% for day in room.reservationData  %}   
+	      {% for slot in day  %}   
+		[{{ slot }}] 
+	      {% endfor %}<br/>
+	    {% endfor %}
+
+
+	    <br/>
 	    </p>
 		  
   

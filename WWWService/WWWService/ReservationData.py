@@ -23,7 +23,14 @@ emptyRoom = {'nextWeek': [
     [0,0,0,0,0,0,0,0,0,0,0,0,],[0,0,0,0,0,0,0,0,0,0,0,0,],
     [0,0,0,0,0,0,0,0,0,0,0,0,],],}
  
-data = {
+data1 = {
+  '112a':deepcopy(emptyRoom),
+  '112b':deepcopy(emptyRoom),
+  '243a':deepcopy(emptyRoom),
+  '243b':deepcopy(emptyRoom),
+  }
+  
+data2 = {
   '142a':deepcopy(emptyRoom),
   '142b':deepcopy(emptyRoom),
   '143a':deepcopy(emptyRoom),
@@ -32,7 +39,7 @@ data = {
   '243b':deepcopy(emptyRoom),
   }
 
-buildings = {'': deepcopy(data), 'Kirjasto': deepcopy(data), 'Maarintalo': deepcopy(data)}
+buildings = {'Kirjasto': data1, 'Maarintalo': data2}
 
 def GetReservationData(building, room):
   "This queries reservation database and returns entries for a room in a building"

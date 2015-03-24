@@ -9,6 +9,7 @@ from django.core.context_processors import csrf
 import re
 import urllib2
 import RoomData
+import ReservationData
 import time as tt
 
 def search(request):
@@ -44,7 +45,11 @@ def search(request):
   context.update({'noBuilding': False})
   
   # no search, always send all data
-  context.update({"OK": True, 'rooms': RoomData.getRoomData(building)})
+  roomData = RoomData.getRoomData(building)
+  for room in roomData:
+    room['reservationData'] = ReservationData.GetReservationData(building, room['id']);
+  
+  context.update({"OK": True, 'rooms': roomData})
     #context.update({"OK": False, 'msg': 'No rooms available.'})
   
   return render(request, "index.html", context) 
