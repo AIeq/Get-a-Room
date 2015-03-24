@@ -2,10 +2,47 @@
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="col-md-8">
+       
       	<div class="input-group input-group-lg">
 	  <span class="input-group-addon"><i class="fa fa-flag"></i> Room {{ room.id }}</span>	  
+	  <div class="text-left  span4 collapse-group input-group-addon">
+	    <p><a class=" btn" href="#">View details &darr;</a></p>
+	    <p class="text-left collapse">
+	    {{ room.type }} for <br/>
+	    {{ room.size }} persons<br/>
+	    location: {{ room.location }}<br/>
+	    features: <br/>
+	    {% for feature in room.features  %}   
+	      * {{ feature }}<br/>
+	    {% endfor %} 
+	    insights: <br/>
+	    {% for insight in room.insights  %}   
+	      * {{ insight }}<br/>
+	    {% endfor %}
+		    
+	    </p>
+		  
+  
+	  </div>	 
+	  <div class="input-group-addon">
+	  <button type="" class="btn btn-default btn-submit  ">Reserve</button>
+	  </div>
+        
       	</div>
+      	  
       </div>
+ 
     </div> 
+     
 </div>
+           
 {% endfor %}
+
+<script type="text/javascript">
+  $('.row .btn').on('click', function(e) {
+      e.preventDefault();
+      var $this = $(this);
+      var $collapse = $this.closest('.collapse-group').find('.collapse');
+      $collapse.collapse('toggle');
+  });
+</script>
