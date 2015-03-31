@@ -18,20 +18,38 @@ def search(request):
   context = {}
   context.update(csrf(request))
   try:
+    email = request.POST.get('email')
+  except Exception as e:
+    email = ''
+  try:
     building = request.POST.get('building')
-    # no search, always send all data
+  except Exception as e:
+    building = ''
+    context.update({'building': None})
+  if email != '' and building != '':
+    try:
+      reserve = request.POST.get('reserve')
+    except Exception as e:
+      reserve = ''
+    try:
+      reserve = reserve.split(':')
+      room = reserve[0]
+      times = reserve[1].split(' ')
+    except Exception as e:
+      times = []
+    ok = True
+    for reservationTime in times:
+      day, slot = reservationTime.split(',')
+      ok = ok and ReservationData.ReserveRoom(building, room, int(day), int(slot), email)
+    #TODO: handle errors
+
     roomData = RoomData.getRoomData(building)
     for room in roomData:
       room['reservationData'] = ReservationData.GetAnonymizedReservationData(building, room['id']);
       "flip it"
       room['reservationData'] = map(list, zip(*room['reservationData']))
     context.update({'rooms': roomData})
-  except Exception as e:
-    context.update({'building': None})
-  try:
-    email = request.POST.get('email')
-  except Exception as e:
-    email = ''
+
   try:
     time = request.POST.get('time')
     time = int(time) 
@@ -48,6 +66,7 @@ def search(request):
     day = 'today'
   if day is None:
     day = 'today'
+  
   context.update({'building': building, 'email': email, 'time': time, 'time2': time2, 'day': day})
 
   
