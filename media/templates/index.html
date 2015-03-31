@@ -5,10 +5,6 @@
   {% else %} 
   	{% include "searchform.html" %}
   	{% include "spinner.html" %}
-    {% if OK %}
-    	{% include "searchresults.html" %}
-    {% else %}
-	    {% include "searchfailure.html" %}
-	{% endif %}
+    {% include "searchresults.html" %}
   {% endif %}
 {% endblock %}

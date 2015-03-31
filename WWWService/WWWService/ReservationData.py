@@ -4,13 +4,13 @@ from copy import deepcopy
 
 emptyRoom = {'nextWeek': [
     ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
-    ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
+    ['','','','','','','hello@aalto.fi','','','','','',],['','','','','','','','','','','','',],
     ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
     ['','','','','','','','','','','','',],],
     'thisWeek': [
+    ['','','','','','','','','','hello@aalto.fi','','',],['','','','','','','','','','','','',],
     ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
-    ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
-    ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
+    ['','','','','','','','','','','','',],['','','','','hello@aalto.fi','','','','','','','',],
     ['','','','','','','','','','','','',],],
     'lastWeek': [
     ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
@@ -45,13 +45,24 @@ def GetReservationData(building, room):
   "This queries reservation database and returns entries for a room in a building"
   "The first version will just return static list"
   return buildings[building][room]['thisWeek']
+
+def GetAnonymizedReservationData(building, room):
+  "This queries reservation database and returns entries for a room in a building"
+  "The first version will just return static list"
+  d = buildings[building][room]
+  reservations = []
+  for day, thisWeek in enumerate(d['thisWeek']):
+    reservations.append([])
+    for timeSlot, _ in enumerate(thisWeek):
+      reservations[day].append(thisWeek[timeSlot] != '')
+  return reservations
   
 def GetStatistics(building, room):
   d = buildings[building][room]
   statistics = deepcopy(d['statistics'])
-  for lastWeek in d['lastWeek']:
+  for day, lastWeek in enumerate(d['lastWeek']):
     for timeSlot, _ in enumerate(lastWeek):
-      statistics[timeSlot] += int(lastWeek[timeSlot] != '')
+      statistics[day][timeSlot] += int(lastWeek[timeSlot] != '')
   return statistics
 
 def ReserveRoom(building, room, weekday, timeslot, email):

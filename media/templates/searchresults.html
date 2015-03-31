@@ -7,7 +7,7 @@
 	  <span class="input-group-addon"><i class="fa fa-flag"></i> Room {{ room.id }}</span>	  
 	  <div class="text-left  span4 collapse-group input-group-addon">
 	    <p><a class=" btn" href="#">View details &darr;</a></p>
-	    <p class="text-left collapse">
+	    <div class="text-left collapse">
 	    {{ room.type }} for <br/>
 	    {{ room.size }} persons<br/>
 	    location: {{ room.location }}<br/>
@@ -20,16 +20,25 @@
 	      * {{ insight }}<br/>
 	    {% endfor %}
 	    Free times:<br/>
-	    {% for day in room.reservationData  %}   
-	      {% for slot in day  %}   
-		[{{ slot }}] 
-	      {% endfor %}<br/>
-	    {% endfor %}
-
-
-	    <br/>
-	    </p>
-		  
+      <table border="1" style="width:220px">
+        <tr>  
+          <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
+        </tr>
+        {% for slot in room.reservationData  %} 
+        <tr>
+          {% for day in slot  %}     
+          <td align="center">          
+            {% if day %}
+            <input type="checkbox" disabled>
+            {% else %}   
+            <input type="checkbox" name="reserve" value="{{ forloop.counter0 }},{{forloop.parentloop.counter0}}">
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table> 
+	    </div>		  
   
 	  </div>	 
 	  <div class="input-group-addon">
