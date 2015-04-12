@@ -26,6 +26,7 @@ def search(request):
   except Exception as e:
     building = ''
     context.update({'building': None})
+  context.update({'building': None})
   if email != '' and building != '':
     try:
       reserve = request.POST.get('reserve')
@@ -70,4 +71,4 @@ def search(request):
   context.update({'building': building, 'email': email, 'time': time, 'time2': time2, 'day': day})
 
   
-  return render(request, "index.html", context) 
+  return render(request, "index.html", context)

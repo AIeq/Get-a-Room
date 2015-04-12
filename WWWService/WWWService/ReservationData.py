@@ -49,7 +49,12 @@ def GetReservationData(building, room):
 def GetAnonymizedReservationData(building, room):
   "This queries reservation database and returns entries for a room in a building"
   "The first version will just return static list"
-  d = buildings[building][room]
+  
+  #print buildings['Kirjasto']['112a']
+
+  #d = buildings[building][room]
+  d = buildings['Kirjasto']['112a']
+  
   reservations = []
   for day, thisWeek in enumerate(d['thisWeek']):
     reservations.append([])
