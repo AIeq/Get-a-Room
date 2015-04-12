@@ -1,5 +1,5 @@
 {% for room in rooms %}      	
-<div class="row">
+<div class="row" id="{{ room.id }}">
     <div class="col-md-8 col-md-offset-2">
       <div class="col-md-8">
        
@@ -78,4 +78,43 @@
       $("#search-form")[0]["reserve"].value = roomID + ":" + reservations;
       $("#search-form").submit();
   };
+</script>
+
+<script>
+function myFunction() {
+    var x = document.getElementById("roomtype");
+    var y = document.getElementById("roomlocation");
+    var z = document.getElementById("roomsize");
+    var tab2 = document.getElementById("2tables");
+    var proj = document.getElementById("projector");
+    var flag1 = false;
+    var flag2 = false;
+    {% for room in rooms %}
+      if (("{{ room.type }}" == x.value || x.value == "All") && ("{{ room.location }}" == y.value || y.value == "All") && ("{{ room.size }}" == z.value || z.value == "All")){
+
+        $("#{{ room.id }}").show();
+
+        flag1 = false;
+        falg2 = false;
+        {% for feature in room.features  %}
+          if ("{{ feature }}" == "Two tables") {
+            flag1 = true;
+          }
+          if ("{{ feature }}" == "Projector") {
+            flag2 = true;
+          }
+        {% endfor %}
+
+        if ((tab2.checked == true) && (flag1 == false)){
+          $("#{{ room.id }}").hide();
+        }
+        if ((proj.checked == true) && (flag2 == false)){
+          $("#{{ room.id }}").hide();
+        }
+      }
+      else {
+        $("#{{ room.id }}").hide();
+      }
+    {% endfor %}
+}
 </script>

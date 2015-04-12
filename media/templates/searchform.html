@@ -30,6 +30,51 @@
   </div>
   -->
 </form>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="input-group input-group-lg">
+          <!--<span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i> Requirements of the room</span>-->
+          <div class="form-group">
+            <label for="roomtype">Room Type:</label>
+            <select class="form-control" id="roomtype" onchange="myFunction()">
+              <option selected="selected">All</option>
+              <option value="meeting room">Meeting Room</option>
+              <option value="work room">Work Room</option>
+            </select>
+          </div>
+          <div class="form-group">
+          <label for="roomlocation">Room Location:</label>
+            <select class="form-control" id="roomlocation" onchange="myFunction()">
+              <option selected="selected">All</option>
+              <option value="first floor">First floor</option>
+              <option value="second floor">Second floor</option>
+            </select>
+          </div>
+          <div class="form-group">
+          <label for="roomsize">Room Size:</label>
+            <select class="form-control" id="roomsize" onchange="myFunction()">
+              <option selected="selected">All</option>
+              <option value="4">4 people</option>
+              <option value="6">6 people</option>
+            </select>
+          </div>
+          <label>Room Features:</label><br>
+          <div class="btn-group" data-toggle="buttons" onchange="myFunction()">
+            <label class="btn btn-default active">
+              <input type="radio" name="options" id="1table" autocomplete="off" checked> 1 Table
+            </label>
+            <label class="btn btn-default">
+              <input type="radio" name="options" id="2tables" autocomplete="off"> 2 Tables
+            </label>
+            <label class="btn btn-default">
+              <input type="checkbox" name="options" id="projector" autocomplete="off"> Projector
+            </label>
+          </div>
+          <button type="button" class="btn btn-default" onclick="resetValues()">Reset</button><br><br>
+      </div>
+
+    </div>
+</div>
 {% load staticfiles %}
 <script type="text/javascript" src="{% static "jquery-1.11.0.min.js" %}"></script>
 <script type="text/javascript" src="{% static "jquery.validate.min.js" %}"></script>
@@ -55,4 +100,16 @@ $(function(){
         }
     });
 });
+</script>
+<script type="text/javascript">
+  function resetValues(){
+    document.getElementById("roomtype").value = "All";
+    document.getElementById("roomlocation").value = "All";
+    document.getElementById("roomsize").value = "All";
+    $('#1table').closest('.btn').button('toggle');
+    if (document.getElementById("projector").checked == true){
+      $('#projector').closest('.btn').button('toggle');
+    }
+    myFunction();
+  }
 </script>
