@@ -8,19 +8,19 @@
 	  <div class="text-left  span4 collapse-group input-group-addon">
 	    <p><a class=" btn" href="#">View details &darr;</a></p>
 	    <div class="text-left collapse">
-	    {{ room.type }} for <br/>
+	    <b>{{ room.type }} for </b><br/>
 	    {{ room.size }} persons<br/>
-	    location: {{ room.location }}<br/>
-	    features: <br/>
+	    <b>location:</b> {{ room.location }}<br/>
+	    <b>features:</b> <br/>
 	    {% for feature in room.features  %}   
 	      * {{ feature }}<br/>
 	    {% endfor %} 
-	    insights: <br/>
+	    <b>insights:</b> <br/>
 	    {% for insight in room.insights  %}   
 	      * {{ insight }}<br/>
 	    {% endfor %}
-	    Free times:<br/>
-      <table border="1" style="width:220px">
+	    <b>Free times:</b><br/>
+      <table id="{{ room.id }}_reservations" border="1" style="width:220px">
         <tr>  
           <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
         </tr>
@@ -42,8 +42,8 @@
   
 	  </div>	 
 	  <div class="input-group-addon">
-	  <button type="" class="btn btn-default btn-submit  ">Reserve</button>
-	  </div>
+	  <button type="" class="btn btn-default" onclick="reserve('{{ room.id }}')">Reserve</button>
+	  </div> 
         
       	</div>
       	  
@@ -54,7 +54,6 @@
 </div>
            
 {% endfor %}
-
 <script type="text/javascript">
   $('.row .btn').on('click', function(e) {
       e.preventDefault();
@@ -62,4 +61,21 @@
       var $collapse = $this.closest('.collapse-group').find('.collapse');
       $collapse.collapse('toggle');
   });
+</script>
+<script type="text/javascript">
+  reserve = function(roomID) {      
+      var table = $("#" + roomID + "_reservations")[0]; 
+      reservations = "";
+      for (var i = 1, row; row = table.rows[i]; i++) {
+         for (var j = 0, col; col = row.cells[j]; j++) {
+           var cb= $(col).children()[0];
+           if (cb.checked) {
+             if (reservations != "") reservations = reservations + " ";
+             reservations = reservations + cb.value;
+           }
+         }  
+      }
+      $("#search-form")[0]["reserve"].value = roomID + ":" + reservations;
+      $("#search-form").submit();
+  };
 </script>

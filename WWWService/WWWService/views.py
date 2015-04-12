@@ -13,7 +13,7 @@ import ReservationData
 import time as tt
 
 def search(request):
-  building = '' 
+  building = None 
   localtime = tt.localtime()
   context = {}
   context.update(csrf(request))
@@ -24,9 +24,9 @@ def search(request):
   try:
     building = request.POST.get('building')
   except Exception as e:
-    building = ''
-    context.update({'building': None})
-  if email != '' and building != '':
+    building = None 
+  context.update({'building': building})
+  if email != '' and building != None:
     try:
       reserve = request.POST.get('reserve')
     except Exception as e:
@@ -35,6 +35,8 @@ def search(request):
       reserve = reserve.split(':')
       room = reserve[0]
       times = reserve[1].split(' ')
+      if times[0] == '':
+        times = []    
     except Exception as e:
       times = []
     ok = True

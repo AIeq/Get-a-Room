@@ -1,6 +1,7 @@
 <form id="search-form" class="form-horizontal" role="form" method="post" action="">
 {% csrf_token %}
 <input name="building" type="hidden" class="required form-control input-lg" placeholder="building" value="{{ building }}">
+<input name="reserve" type="hidden" class="required form-control input-lg" placeholder="reserve" value="">
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="input-group input-group-lg">
