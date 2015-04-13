@@ -21,20 +21,19 @@
 	      * {{ insight }}<br/>
 	    {% endfor %}
 	    <b>Free times:</b><br/>
-      <table id="{{ room.id }}_reservations" border="1" style="width:220px">
+      <table id="{{ room.id }}_reservations" border="1" style="width:220px" align="center">
         <tr>  
-          <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
+          <td> </td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
         </tr>
-        {% for slot in room.reservationData  %} 
-        <tr>
-          {% for day in slot  %}     
-          <td align="center">          
+        {% for slot in room.reservationData  %}
+        <tr>        
+        <td>{{ forloop.counter0|add:"8" }}:00 - {{ forloop.counter0|add:"9" }}:00</td> 
+          {% for day in slot  %}
             {% if day %}
-            <input type="checkbox" disabled>
-            {% else %}   
-            <input type="checkbox" name="reserve" value="{{ forloop.counter0 }},{{forloop.parentloop.counter0}}">
+              <td class = "reserved">
+            {% else %}
+              <td class = "free" name="reserve" value="{{ forloop.counter0 }},{{forloop.parentloop.counter0}}">
             {% endif %}
-          </td>
           {% endfor %}
         </tr>
         {% endfor %}
@@ -62,8 +61,28 @@
   });
 </script>
 <script type="text/javascript">
-  reserve = function(roomID) {      
-      var table = $("#" + roomID + "_reservations")[0]; 
+  reserve = function(roomID) {
+    var table = $("#" + roomID + "_reservations")[0];
+    reservations = "";
+
+
+
+      for (var i = 1, row; row = table.rows[i]; i++) {
+         for (var j = 0, col; col = row.cells[j]; j++) {
+          var cb = $(col);
+          if ($(cb).hasClass( "selected" )) {
+            if (reservations != "") reservations = reservations + " ";
+            reservations = reservations + cb.value;
+          }
+         }  
+      }
+      $("#search-form")[0]["reserve"].value = roomID + ":" + reservations;
+      $("#search-form").submit();
+
+
+
+
+     /* var table = $("#" + roomID + "_reservations")[0]; 
       reservations = "";
       for (var i = 1, row; row = table.rows[i]; i++) {
          for (var j = 0, col; col = row.cells[j]; j++) {
@@ -75,11 +94,11 @@
          }  
       }
       $("#search-form")[0]["reserve"].value = roomID + ":" + reservations;
-      $("#search-form").submit();
+      $("#search-form").submit();*/
   };
 </script>
 
-<script>
+<script type="text/javascript">
 function myFunction() {
     var x = document.getElementById("roomtype");
     var y = document.getElementById("roomlocation");
@@ -116,4 +135,10 @@ function myFunction() {
       }
     {% endfor %}
 }
+</script>
+
+<script type="text/javascript">
+$( ".free" ).click(function() {
+  $( this ).toggleClass( "selected" );
+});
 </script>

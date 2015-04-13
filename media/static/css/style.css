@@ -6,3 +6,15 @@ body {
 .navbar {
   margin-bottom: 20px;
 }
+
+.free {
+	background-color: lightgreen;
+}
+
+.reserved {
+	background-color: indianred;
+}
+
+.selected {
+    background: yellow;
+}
