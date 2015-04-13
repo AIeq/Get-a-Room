@@ -30,9 +30,9 @@
         <td>{{ forloop.counter0|add:"8" }}:00 - {{ forloop.counter0|add:"9" }}:00</td> 
           {% for day in slot  %}
             {% if day %}
-              <td class = "reserved">
+              <td class = "reserved"></td></td>
             {% else %}
-              <td class = "free" name="reserve" value="{{ forloop.counter0 }},{{forloop.parentloop.counter0}}">
+              <td class = "free" name="reserve" value="{{ forloop.counter0 }},{{forloop.parentloop.counter0}}"></td>
             {% endif %}
           {% endfor %}
         </tr>
@@ -62,27 +62,17 @@
 </script>
 <script type="text/javascript">
   reserve = function(roomID) {
-    var table = $("#" + roomID + "_reservations")[0];
+    var timeSlots = $("#" + roomID + "_reservations td.free.selected");
     reservations = "";
-
-
-
-      for (var i = 1, row; row = table.rows[i]; i++) {
-         for (var j = 0, col; col = row.cells[j]; j++) {
-          var cb = $(col);
-          if ($(cb).hasClass( "selected" )) {
-            if (reservations != "") reservations = reservations + " ";
-            reservations = reservations + cb.value;
-          }
-         }  
-      }
-      $("#search-form")[0]["reserve"].value = roomID + ":" + reservations;
-      $("#search-form").submit();
-
-
-
-
-     /* var table = $("#" + roomID + "_reservations")[0]; 
+    for (var i = 0; i < timeSlots.length; i++) {
+      if (reservations != "") reservations = reservations + " ";
+      reservations = reservations + timeSlots[i].attributes[2].nodeValue;
+    };
+    $("#search-form")[0]["reserve"].value = roomID + ":" + reservations;
+    $("#search-form").submit();
+  };
+/* reserve = function(roomID) {
+    var table = $("#" + roomID + "_reservations")[0]; 
       reservations = "";
       for (var i = 1, row; row = table.rows[i]; i++) {
          for (var j = 0, col; col = row.cells[j]; j++) {
@@ -94,8 +84,8 @@
          }  
       }
       $("#search-form")[0]["reserve"].value = roomID + ":" + reservations;
-      $("#search-form").submit();*/
-  };
+      $("#search-form").submit();
+  }; */
 </script>
 
 <script type="text/javascript">
