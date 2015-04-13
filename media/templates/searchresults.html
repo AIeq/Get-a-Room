@@ -4,8 +4,9 @@
       <div class="col-md-8">
        
       	<div class="input-group input-group-lg">
-	  <span class="input-group-addon"><i class="fa fa-flag"></i> Room {{ room.id }}</span>	  
+	    
 	  <div class="text-left  span4 collapse-group input-group-addon">
+    Room {{ room.id }} 
 	    <p><a class=" btn" href="#">View details &darr;</a></p>
 	    <div class="text-left collapse">
 	    <b>{{ room.type }} for </b><br/>
@@ -39,9 +40,7 @@
         {% endfor %}
       </table> 
 	    </div>		  
-  
-	  </div>	 
-	  <div class="input-group-addon">
+   
 	  <button type="" class="btn btn-default" onclick="reserve('{{ room.id }}')">Reserve</button>
 	  </div> 
         
