@@ -7,11 +7,19 @@ body {
   margin-bottom: 20px;
 }
 
+.past {
+	background-color: gray;
+}
+
 .free {
 	background-color: lightgreen;
 }
 
 .reserved {
+	background-color: darkgreen;
+}
+
+.taken {
 	background-color: indianred;
 }
 

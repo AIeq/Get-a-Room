@@ -46,7 +46,7 @@ def GetReservationData(building, room):
   "The first version will just return static list"
   return buildings[building][room]['thisWeek']
 
-def GetAnonymizedReservationData(building, room):
+def GetAnonymizedReservationData(building, room, currenDay, currentTimeSlot, email):
   "This queries reservation database and returns entries for a room in a building"
   "The first version will just return static list"
   
@@ -59,7 +59,15 @@ def GetAnonymizedReservationData(building, room):
   for day, thisWeek in enumerate(d['thisWeek']):
     reservations.append([])
     for timeSlot, _ in enumerate(thisWeek):
-      reservations[day].append(thisWeek[timeSlot] != '')
+      if day < currenDay or day == currenDay and timeSlot < currentTimeSlot:
+        reservations[day].append(0)
+      elif thisWeek[timeSlot] == '':
+        reservations[day].append(1)
+      elif thisWeek[timeSlot] == email:
+        reservations[day].append(2)
+      else:
+        reservations[day].append(3)
+        
   return reservations
   
 def GetStatistics(building, room):

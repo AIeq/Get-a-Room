@@ -11,10 +11,13 @@ import urllib2
 import RoomData
 import ReservationData
 import time as tt
+import sys
 
 def search(request):
   building = None 
   localtime = tt.localtime()
+  currentDay = 2
+  currentTimeSlot = localtime[3] - 8
   context = {}
   context.update(csrf(request))
   try:
@@ -40,6 +43,7 @@ def search(request):
     except Exception as e:
       times = []
     ok = True
+    #print >>sys.stderr, times
     for reservationTime in times:
       day, slot = reservationTime.split(',')
       ok = ok and ReservationData.ReserveRoom(building, room, int(day), int(slot), email)
@@ -47,7 +51,7 @@ def search(request):
 
     roomData = RoomData.getRoomData(building)
     for room in roomData:
-      room['reservationData'] = ReservationData.GetAnonymizedReservationData(building, room['id']);
+      room['reservationData'] = ReservationData.GetAnonymizedReservationData(building, room['id'],currentDay,currentTimeSlot,email);
       "flip it"
       room['reservationData'] = map(list, zip(*room['reservationData']))
     context.update({'rooms': roomData})
