@@ -59,6 +59,9 @@ def search(request, building = None, roomID = None):
       room['reservationData'] = ReservationData.GetAnonymizedReservationData(building, room['id'],currentDay,currentTimeSlot,email);
       "flip it"
       room['reservationData'] = map(list, zip(*room['reservationData']))
+      room['statistics'] = ReservationData.GetStatistics(building, room['id']);
+      "flip it"
+      room['statistics'] = map(list, zip(*room['statistics']))
     context.update({'rooms': roomData})
   
   context.update({'roomID': roomID})

@@ -41,7 +41,9 @@
 </form>
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      <div class="input-group input-group-lg">
+      <div class="input-group input-group-lg collapse-group">
+      <p><a class=" btn" href="#">Advanced search &darr;</a></p>
+        <div class="text-left collapse">
           <!--<span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i> Requirements of the room</span>-->
           <div class="form-group">
             <label for="roomtype">Room Type:</label>
@@ -80,8 +82,8 @@
             </label>
           </div>
           <button type="button" class="btn btn-default" onclick="resetValues()">Reset</button><br><br>
+        </div>
       </div>
-
     </div>
 </div>
 {% load staticfiles %}
