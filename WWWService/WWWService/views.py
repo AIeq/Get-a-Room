@@ -13,8 +13,7 @@ import ReservationData
 import time as tt
 import sys
 
-def search(request):
-  building = None 
+def search(request, building = None, roomID = None):
   localtime = tt.localtime()
   currentDay = 2
   currentTimeSlot = localtime[3] - 8
@@ -24,11 +23,17 @@ def search(request):
     email = request.POST.get('email')
   except Exception as e:
     email = ''
-  try:
-    building = request.POST.get('building')
-  except Exception as e:
-    building = None 
+  if building == None :
+    try:
+      building = request.POST.get('building')
+    except Exception as e:
+      "nothing"
   context.update({'building': building})
+  if roomID == None :
+    try:
+      roomID = request.POST.get('roomID')
+    except Exception as e:
+      "nothing"
   if email != '' and building != None:
     try:
       reserve = request.POST.get('reserve')
@@ -36,7 +41,7 @@ def search(request):
       reserve = ''
     try:
       reserve = reserve.split(':')
-      room = reserve[0]
+      roomID = reserve[0]
       times = reserve[1].split(' ')
       if times[0] == '':
         times = []    
@@ -46,7 +51,7 @@ def search(request):
     #print >>sys.stderr, times
     for reservationTime in times:
       day, slot = reservationTime.split(',')
-      ok = ok and ReservationData.ReserveRoom(building, room, int(day), int(slot), email)
+      ok = ok and ReservationData.ReserveRoom(building, roomID, int(day), int(slot), email)
     #TODO: handle errors
 
     roomData = RoomData.getRoomData(building)
@@ -55,7 +60,8 @@ def search(request):
       "flip it"
       room['reservationData'] = map(list, zip(*room['reservationData']))
     context.update({'rooms': roomData})
-
+  
+  context.update({'roomID': roomID})
   try:
     time = request.POST.get('time')
     time = int(time) 

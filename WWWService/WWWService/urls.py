@@ -8,6 +8,7 @@ from WWWService.views import *
 
 urlpatterns = patterns('',
     url(r'^$', 'WWWService.views.search'),
+    url(r'^([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)$', 'WWWService.views.search'),
     # static version:
     url(r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}),
 
