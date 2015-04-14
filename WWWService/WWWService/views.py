@@ -11,11 +11,15 @@ import urllib2
 import RoomData
 import ReservationData
 import time as tt
+import datetime
 import sys
 
+def flipArray(array):
+  return map(list, zip(*array))
+  
 def search(request, building = None, roomID = None):
   localtime = tt.localtime()
-  currentDay = 2
+  currentDay = datetime.datetime.now().weekday() # monday=0.. sunday=6
   currentTimeSlot = localtime[3] - 8
   context = {}
   context.update(csrf(request))
@@ -56,12 +60,8 @@ def search(request, building = None, roomID = None):
 
     roomData = RoomData.getRoomData(building)
     for room in roomData:
-      room['reservationData'] = ReservationData.GetAnonymizedReservationData(building, room['id'],currentDay,currentTimeSlot,email);
-      "flip it"
-      room['reservationData'] = map(list, zip(*room['reservationData']))
-      room['statistics'] = ReservationData.GetStatistics(building, room['id']);
-      "flip it"
-      room['statistics'] = map(list, zip(*room['statistics']))
+      room['reservationData'] = flipArray(ReservationData.GetAnonymizedReservationData(building, room['id'],currentDay,currentTimeSlot,email,'thisWeek') + ReservationData.GetAnonymizedReservationData(building, room['id'],0,0,email,'nextWeek'))
+      room['statistics'] = flipArray(ReservationData.GetStatistics(building, room['id']))
     context.update({'rooms': roomData})
   
   context.update({'roomID': roomID})

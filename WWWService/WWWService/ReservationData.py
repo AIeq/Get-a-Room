@@ -52,7 +52,7 @@ def GetReservationData(building, room):
   "The first version will just return static list"
   return buildings[building][room]['thisWeek']
 
-def GetAnonymizedReservationData(building, room, currenDay, currentTimeSlot, email):
+def GetAnonymizedReservationData(building, room, currenDay, currentTimeSlot, email, week):
   "This queries reservation database and returns entries for a room in a building"
   "The first version will just return static list"
   
@@ -62,14 +62,14 @@ def GetAnonymizedReservationData(building, room, currenDay, currentTimeSlot, ema
   #d = buildings['Kirjasto']['112a']
   
   reservations = []
-  for day, thisWeek in enumerate(d['thisWeek']):
+  for day, week in enumerate(d[week]):
     reservations.append([])
-    for timeSlot, _ in enumerate(thisWeek):
+    for timeSlot, _ in enumerate(week):
       if day < currenDay or day == currenDay and timeSlot < currentTimeSlot:
         reservations[day].append(0)
-      elif thisWeek[timeSlot] == '':
+      elif week[timeSlot] == '':
         reservations[day].append(1)
-      elif thisWeek[timeSlot] == email:
+      elif week[timeSlot] == email:
         reservations[day].append(2)
       else:
         reservations[day].append(3)
@@ -86,7 +86,12 @@ def GetStatistics(building, room):
 
 def ReserveRoom(building, room, weekday, timeslot, email):
   "Timeslot is 0-12, 0 means from 8 to 9 am"
-  day = buildings[building][room]['thisWeek'][weekday]
+  if weekday < 7:
+    week = 'thisWeek'
+  else:
+    week = 'nextWeek'
+    weekday -= 7
+  day = buildings[building][room][week][weekday]
   if day[timeslot] == '':
     day[timeslot] = email
     return True
@@ -95,20 +100,13 @@ def ReserveRoom(building, room, weekday, timeslot, email):
 
 def ReleaseRoom(building, room, weekday, timeslot):
   "Timeslot is 0-12, 0 means from 8 to 9 am"
-  buildings[building][room]['thisWeek'][weekday][timeslot] = ''
-  
-def ReserveRoomAdvance(building, room, weekday, timeslot, email):
-  "Timeslot is 0-12, 0 means from 8 to 9 am"
-  day = buildings[building][room]['nextWeek'][weekday]
-  if day[timeslot] == '':
-    day[timeslot] = email
-    return True
+  if weekday < 7:
+    week = 'thisWeek'
   else:
-    return False
+    week = 'nextWeek'
+    weekday -= 7
+  buildings[building][room][week][weekday][timeslot] = ''
 
-def ReleaseRoomAdvance(building, room, weekday, timeslot):
-  "Timeslot is 0-12, 0 means from 8 to 9 am"
-  buildings[building][room]['nextWeek'][weekday][timeslot] = ''
 
 def EndWeek(building):
     for roomName, d in buildings[building].iteritems():
