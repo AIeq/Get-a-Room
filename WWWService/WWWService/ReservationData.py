@@ -47,18 +47,66 @@ data2 = {
 
 buildings = {'Kirjasto': data1, 'Maarintalo': data2}
 
-def GetReservationData(building, room):
-  "This queries reservation database and returns entries for a room in a building"
-  "The first version will just return static list"
-  return buildings[building][room]['thisWeek']
-
-def GetAnonymizedReservationData(building, room, currenDay, currentTimeSlot, email, week):
-  "This queries reservation database and returns entries for a room in a building"
-  "The first version will just return static list"
+from rooms.models import Room
+from rooms.models import Reservation
+import sys
+def chunks(l, n):
+    n = max(1, n)
+    return [l[i:i + n] for i in range(0, len(l), n)]
+### Populate database ###
+emptyWeekString = ',' * (7*8-1)
+emptyStatisticWeekString = '0,' * (7*8-1) + '0'
+if Reservation.objects.all().count() == 0:
+  for room in Room.objects.all():
+    Reservation(
+      room = room,
+      lastWeek = emptyWeekString,
+      thisWeek = emptyWeekString,
+      nextWeek = emptyWeekString,
+      statistics = emptyStatisticWeekString,
+      ).save()
   
-  #print buildings['Kirjasto']['112a']
+def GetReservationData(building, roomID):
+  "This queries reservation database and returns entries for a room in a building"
+  room = Room.objects.get(building=building, roomID = roomID)
+  res = Reservation.objects.get(room=room)
+  #print >>sys.stderr, DeSerialize(res)
+  return DeSerialize(res)
+  #return buildings[building][roomID]# this version will just return static list
+  
+def DeSerialize(res):
+  result ={
+      'lastWeek' : chunks(res.lastWeek.split(','), 8),
+      'thisWeek' : chunks(res.thisWeek.split(','), 8),
+      'nextWeek' : chunks(res.nextWeek.split(','), 8),
+      'statistics' : chunks(map(int, res.statistics.split(',')), 8),
+  } 
+  return result
 
-  d = buildings[building][room]
+def SetReservationData(building, roomID, d):
+  "This queries reservation database and stores entries for a room in a building"
+  room = Room.objects.get(building=building, roomID = roomID)
+  res = Reservation.objects.get(room=room)
+  #serialize
+  lastWeekString = ''
+  thisWeekString = ''
+  nextWeekString = ''
+  statisticsString = ''
+  for nextWeek, thisWeek, lastWeek, statistics in zip(d['nextWeek'], d['thisWeek'], d['lastWeek'], d['statistics']):
+    for timeSlot, _ in enumerate(thisWeek):
+      lastWeekString += lastWeek[timeSlot] + ','
+      thisWeekString += thisWeek[timeSlot] + ','
+      nextWeekString += nextWeek[timeSlot] + ','
+      statisticsString += str(statistics[timeSlot]) + ','
+  res.lastWeek = lastWeekString[:-1]
+  res.thisWeek = thisWeekString[:-1]
+  res.nextWeek = nextWeekString[:-1]
+  res.statistics = statisticsString[:-1]
+  res.save();
+
+def GetAnonymizedReservationData(building, roomID, currenDay, currentTimeSlot, email, week):
+  "This queries reservation database and returns entries for a room in a building, removes emails"
+  d = GetReservationData(building, roomID)
   #d = buildings['Kirjasto']['112a']
   
   reservations = []
@@ -76,44 +124,50 @@ def GetAnonymizedReservationData(building, room, currenDay, currentTimeSlot, ema
         
   return reservations
   
-def GetStatistics(building, room):
-  d = buildings[building][room]
+def GetStatistics(building, roomID):
+  d = GetReservationData(building, roomID)
   statistics = deepcopy(d['statistics'])
   for day, lastWeek in enumerate(d['lastWeek']):
     for timeSlot, _ in enumerate(lastWeek):
       statistics[day][timeSlot] += int(lastWeek[timeSlot] != '')
   return statistics
 
-def ReserveRoom(building, room, weekday, timeslot, email):
+def ReserveRoom(building, roomID, weekday, timeslot, email):
   "Timeslot is 0-12, 0 means from 8 to 9 am"
   if weekday < 7:
     week = 'thisWeek'
   else:
     week = 'nextWeek'
     weekday -= 7
-  day = buildings[building][room][week][weekday]
+  d = GetReservationData(building, roomID)
+  day = d[week][weekday]
   if day[timeslot] == '':
     day[timeslot] = email
+    SetReservationData(building, roomID, d)
     return True
   else:
     return False
 
-def ReleaseRoom(building, room, weekday, timeslot):
+def ReleaseRoom(building, roomID, weekday, timeslot):
   "Timeslot is 0-12, 0 means from 8 to 9 am"
   if weekday < 7:
     week = 'thisWeek'
   else:
     week = 'nextWeek'
     weekday -= 7
-  buildings[building][room][week][weekday][timeslot] = ''
+  d = GetReservationData(building, roomID)
+  d[week][weekday][timeslot] = ''
+  SetReservationData(building, roomID, d)
 
 
-def EndWeek(building):
-    for roomName, d in buildings[building].iteritems():
-        for nextWeek, thisWeek, lastWeek, statistics in zip(d['nextWeek'], d['thisWeek'], d['lastWeek'], d['statistics']):
-            for timeSlot, _ in enumerate(thisWeek):
-                statistics[timeSlot] += int(lastWeek[timeSlot] != '')
-                lastWeek[timeSlot] = thisWeek[timeSlot]
-                thisWeek[timeSlot] = nextWeek[timeSlot]
-                nextWeek[timeSlot] = ''
+def EndWeek():
+  for room in Room.objects.all():
+    res = Reservation.objects.get(room=room)
+    d = DeSerialize(res)
+    for nextWeek, thisWeek, lastWeek, statistics in zip(d['nextWeek'], d['thisWeek'], d['lastWeek'], d['statistics']):
+      for timeSlot, _ in enumerate(thisWeek):
+        statistics[timeSlot] += int(lastWeek[timeSlot] != '')
+        lastWeek[timeSlot] = thisWeek[timeSlot]
+        thisWeek[timeSlot] = nextWeek[timeSlot]
+        nextWeek[timeSlot] = ''
   
