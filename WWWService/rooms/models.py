@@ -1,16 +1,26 @@
 from django.db import models
 from django.contrib import admin 
 
+
+class Building(models.Model):
+    name = models.CharField(max_length=200, primary_key=True)
+    description = models.CharField(max_length=200, blank=True)
+    def __unicode__(self):
+       return 'Building: ' + self.name
+       
 class Room(models.Model):
-    roomID = models.CharField(max_length=200, primary_key=True)
+    building = models.ForeignKey(Building)
+    roomID = models.CharField(max_length=200)
     location = models.CharField(max_length=200)
     size = models.IntegerField()
     type = models.CharField(max_length=200)
     features = models.CharField(max_length=200, blank=True)
     insights = models.CharField(max_length=200, blank=True)
     picture = models.CharField(max_length=200, blank=True)
+    class Meta:
+        unique_together = (("building", "roomID"),)
     def __unicode__(self):
-       return 'Room: ' + self.roomID
+       return 'Room: ' + self.building.name + " " + self.roomID
     
 class Email(models.Model):
     email = models.CharField(max_length=200, primary_key=True)
@@ -19,16 +29,17 @@ class Email(models.Model):
 
 class Reservation(models.Model):
     room = models.ForeignKey(Room, primary_key=True)
-    lastWeek = models.CharField(max_length=200)
-    thisWeek = models.CharField(max_length=200)
-    nextWeek = models.CharField(max_length=200)
-    statistics = models.CharField(max_length=200)
+    lastWeek = models.CharField(max_length=615) # 7 * 8 * (10 +1 )
+    thisWeek = models.CharField(max_length=615)
+    nextWeek = models.CharField(max_length=615)
+    statistics = models.CharField(max_length=615)
     def __unicode__(self):
-       return 'Reservation: ' + self.room.roomID
+       return 'Reservation: ' + self.room.building.name + " " + self.room.roomID
     
     
 
-
+admin.site.register(Building)
 admin.site.register(Room)
 admin.site.register(Email)
 admin.site.register(Reservation)
+

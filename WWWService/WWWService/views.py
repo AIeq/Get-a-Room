@@ -17,6 +17,12 @@ import sys
 def flipArray(array):
   return map(list, zip(*array))
   
+def clean(array):
+  if array[0] == '':
+    return[] 
+  else:
+    return array
+    
 def search(request, building = None, roomID = None):
   localtime = tt.localtime()
   currentDay = datetime.datetime.now().weekday() # monday=0.. sunday=6
@@ -46,9 +52,7 @@ def search(request, building = None, roomID = None):
     try:
       reserve = reserve.split(':')
       roomID = reserve[0]
-      times = reserve[1].split(' ')
-      if times[0] == '':
-        times = []    
+      times = filter(None, reserve[1].split(' '))
     except Exception as e:
       times = []
     ok = True
