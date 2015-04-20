@@ -1,10 +1,5 @@
 <header class="information-header"  style="margin-bottom:10px;">
   <div class="row">
-    <div class="col-md-12">
-      <h1>Get-a-Room</h1>
-    </div>
-  </div>
-  <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <ul class="nav nav-tabs">
         <li {% if building == None %} class="active" {% endif %} ><a href="/">Campus Buildings</a></li>
@@ -17,7 +12,3 @@
   </div>
 </header>
 {% include "about.html" %}
-{% load staticfiles %}
-<script type="text/javascript" src="{% static "jquery-1.11.0.min.js" %}"></script>
-<script type="text/javascript" src="{% static "jquery.validate.min.js" %}"></script>
-<script type="text/javascript" src="{% static "bootstrap.min.js" %}"></script>
