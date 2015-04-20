@@ -28,7 +28,8 @@ def search(request, building = None, roomID = None):
   currentDay = datetime.datetime.now().weekday() # monday=0.. sunday=6
   currentTimeSlot = localtime[3] - 8
   context = {}
-  context.update(csrf(request))
+  context.update(csrf(request))  
+  context.update({'buildings': RoomData.getBuildings()})
   try:
     email = request.POST.get('email')
   except Exception as e:

@@ -39,7 +39,13 @@ if Building.objects.all().count() == 0:
   Room(building = m, roomID = '143b',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '143b.jpg',).save()
   Room(building = m, roomID = '243a',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243a.jpg',).save()
   Room(building = m, roomID = '243b',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243b.jpg',).save()
-  
+
+def getBuildings():
+  result = []
+  for b in Building.objects.all():
+    r = {'name': b.name, 'description': b.description}
+    result += [r]
+  return result
   
 def getRoomData(building):
   "This queries room database and returns entries for all rooms in a building"  

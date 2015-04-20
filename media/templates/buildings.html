@@ -1,19 +1,18 @@
-<form id="search-form" class="form-horizontal" role="form" method="post" action="">
-{% csrf_token %}
-<input name="building" type="hidden" class="required form-control input-lg" placeholder="building" value="Kirjasto">
-  <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <button type="submit" class="btn btn-default submit-btn pull-left">Kirjasto</button>
-    </div>
-  </div>
-</form>
-<form id="search-form" class="form-horizontal" role="form" method="post" action="">
-{% csrf_token %}
-<input name="building" type="hidden" class="required form-control input-lg" placeholder="building" value="Maarintalo">
-  <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <button type="submit" class="btn btn-default submit-btn pull-left">Maarintalo</button>
-    </div>
-  </div>
-</form>
 
+{% for building in buildings %}  
+  <form id="search-form-{{ building.name }}" class="form-horizontal" role="form" method="post" action="">
+    {% csrf_token %}
+    <input name="building" type="hidden" class="required form-control input-lg" placeholder="building" value="{{ building.name }}">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="form-group"> 
+          <div class="col-sm-4">
+          <input type="submit" class="btn btn-default submit-btn form-control" id="label-{{ building.name }}"  value="{{ building.name }}" />
+          </div>
+          <label for="label-{{ building.name }}" class="col-sm-8 control-label" style ="text-align:left">{{ building.description }}</label>
+          
+        </div>
+      </div>
+      </div>
+</form>
+{% endfor %}
