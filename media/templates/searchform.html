@@ -86,7 +86,9 @@
       </div>
     </div>
 </div>
-
+{% if reservationSuccess == True %}
+          succcesfully reserved room {{ roomID }}
+        {% endif %}  
 <script type="text/javascript">
 $(function(){
     $("#search-form").validate({
