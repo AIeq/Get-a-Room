@@ -22,13 +22,13 @@
       {% endfor %}
       <img src="{{ room.picture }}">
       <b>Free times:</b><br/>
-      <table id="{{ room.id }}_reservations" border="1" style="width:220px" align="center">
-        <tr>  
+      <table id="{{ room.id }}_reservations" border="1" align="center">
+        <tr class="days">  
           <td> </td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
         </tr>
         {% for slot in room.reservationData  %}
-        <tr>        
-          <td>{{ forloop.counter0|add:"8" }}:00 - {{ forloop.counter0|add:"9" }}:00</td> 
+        <tr class="hours">        
+          <td>{{ forloop.counter0|add:"8" }}h</td> 
           {% for day in slot  %}
             {% if day == 0 %}
               <td class = "past"></td>
@@ -50,7 +50,7 @@
         </tr>
         {% for slot in room.statistics  %}
         <tr>        
-          <td>{{ forloop.counter0|add:"8" }}:00 - {{ forloop.counter0|add:"9" }}:00</td> 
+          <td>{{ forloop.counter0|add:"8" }}h</td> 
           {% for day in slot  %} 
             <td>{{ day }}</td> 
           {% endfor %}

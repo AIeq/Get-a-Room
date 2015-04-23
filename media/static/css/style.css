@@ -30,3 +30,14 @@ body {
 button.btn {
 	font-weight: bold;
 }
+
+table {
+	width: 90%;
+	border: black;
+	text-align: center;
+}
+
+td {
+    width:6%;
+    position:relative;
+}
