@@ -23,11 +23,11 @@
       <img src="{{ room.picture }}">
       <b>Free times:</b><br/>
       <table id="{{ room.id }}_reservations" border="1" align="center">
-        <tr class="days">  
+        <tr>  
           <td> </td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
         </tr>
         {% for slot in room.reservationData  %}
-        <tr class="hours">        
+        <tr>        
           <td>{{ forloop.counter0|add:"8" }}h</td> 
           {% for day in slot  %}
             {% if day == 0 %}

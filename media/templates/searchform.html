@@ -26,12 +26,15 @@
     <div class="col-md-8 col-md-offset-2">
       <div class="input-group input-group-lg">
           <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i> Room number</span>
-          <input name="roomID" type="text" class="required form-control input-lg" placeholder="" value="{{ roomID }}">
+          <input id="searchRoom" name="roomID" type="text" class="form-control input-lg" placeholder="" value="{{ roomID }}">
 
       </div>
     </div>
   </div>
   <!--
+
+<input id="searchRoom" name="roomID" type="text" class="form-control input-lg" placeholder="" value="{{ roomID }}">
+
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <button type="submit" class="btn btn-default submit-btn pull-right">Search</button>
@@ -122,4 +125,21 @@ $(function(){
     }
     myFunction();
   }
+</script>
+<script type="text/javascript">
+  $("#searchRoom").keyup(function() {
+    var val = $.trim(this.value).toUpperCase();
+    var roomname;
+      {% for room in rooms %}
+        roomname = "Room " + $("#{{ room.id }}").text().toUpperCase();
+        if (val === "")
+            $("#{{ room.id }}").show();
+        else {
+            $("#{{ room.id }}").hide();
+            $("#{{ room.id }}").filter(function() {
+                return -1 != roomname.indexOf(val);
+            }).show();
+        }
+      {% endfor %}
+});
 </script>
