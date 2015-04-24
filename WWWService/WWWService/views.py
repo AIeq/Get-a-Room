@@ -61,6 +61,7 @@ def search(request, building = None, roomID = None):
     for reservationTime in times:
       day, slot = reservationTime.split(',')
       ok = ok and ReservationData.ReserveRoom(building, roomID, int(day), int(slot), email)
+    context.update({'reservationSuccess': ok})
     #TODO: handle errors
 
     roomData = RoomData.getRoomData(building)

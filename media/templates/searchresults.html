@@ -1,33 +1,34 @@
-{% for room in rooms %}      	
+{% for room in rooms %} 
 <div class="row" id="{{ room.id }}">
-    <div class="col-md-8 col-md-offset-2">
-      <div class="col-md-8">
-       
-      	<div class="input-group input-group-lg">
-	    
-	  <div class="text-left  span4 collapse-group input-group-addon">
-    Room {{ room.id }} 
-	    <p><a class=" btn" href="#">View details &darr;</a></p>
-	    <div class="text-left collapse">
-	    <b>{{ room.type }} for </b><br/>
-	    {{ room.size }} persons<br/>
-	    <b>location:</b> {{ room.location }}<br/>
-	    <b>features:</b> <br/>
-	    {% for feature in room.features  %}   
-	      * {{ feature }}<br/>
-	    {% endfor %} 
-	    <b>insights:</b> <br/>
-	    {% for insight in room.insights  %}   
-	      * {{ insight }}<br/>
-	    {% endfor %}
-	    <b>Free times:</b><br/>
-      <table id="{{ room.id }}_reservations" border="1" style="width:220px" align="center">
+    <div class="col-md-4 col-md-offset-4">
+<div class="text-center  span4 collapse-group panel panel-primary">
+    <div class="panel-heading">
+    <b>Room {{ room.id }}</b>
+    <button type="" class="btn btn-success col-md-offset-1" onclick="reserve('{{ room.id }}')">Reserve</button>
+    </div>
+    <div class="panel-body">
+      <p><a class=" btn" href="#">View details &darr;</a></p>
+      <div class="text-left collapse">
+      <b>{{ room.type }} for </b><br/>
+      {{ room.size }} persons<br/>
+      <b>location:</b> {{ room.location }}<br/>
+      <b>features:</b> <br/>
+      {% for feature in room.features  %}   
+        * {{ feature }}<br/>
+      {% endfor %} 
+      <b>insights:</b> <br/>
+      {% for insight in room.insights  %}   
+        * {{ insight }}<br/>
+      {% endfor %}
+      <img src="{{ room.picture }}">
+      <b>Free times:</b><br/>
+      <table id="{{ room.id }}_reservations" border="1" align="center">
         <tr>  
           <td> </td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
         </tr>
         {% for slot in room.reservationData  %}
         <tr>        
-          <td>{{ forloop.counter0|add:"8" }}:00 - {{ forloop.counter0|add:"9" }}:00</td> 
+          <td>{{ forloop.counter0|add:"8" }}h</td> 
           {% for day in slot  %}
             {% if day == 0 %}
               <td class = "past"></td>
@@ -49,27 +50,21 @@
         </tr>
         {% for slot in room.statistics  %}
         <tr>        
-          <td>{{ forloop.counter0|add:"8" }}:00 - {{ forloop.counter0|add:"9" }}:00</td> 
+          <td>{{ forloop.counter0|add:"8" }}h</td> 
           {% for day in slot  %} 
             <td>{{ day }}</td> 
           {% endfor %}
         </tr>
         {% endfor %}
       </table> 
-	    </div>		  
-   
-	  <button type="" class="btn btn-default" onclick="reserve('{{ room.id }}')">Reserve</button>
-	  </div> 
-        
-      	</div>
-      	  
       </div>
- 
-    </div> 
-     
-</div>
-           
+      </div>
+      </div>
+      </div>
+      </div>
 {% endfor %}
+
+
 <script type="text/javascript">
   $('.row .btn').on('click', function(e) {
       e.preventDefault();
