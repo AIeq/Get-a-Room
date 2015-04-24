@@ -58,18 +58,23 @@ def search(request, building = None, roomID = None):
       times = []
     ok = True
     #print >>sys.stderr, times
+    reservationTimes =''
     for reservationTime in times:
       day, slot = reservationTime.split(',')
-      ok = ok and ReservationData.ReserveRoom(building, roomID, int(day), int(slot), email)
-    context.update({'reservationSuccess': ok})
+      if ReservationData.ReserveRoom(building, roomID, int(day), int(slot), email):
+        reservationTimes += str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
+      else: 
+        ok = False 
+    context.update({'reservationSuccess': ok and len(times) > 0, 'reservationTimes': reservationTimes[:-2]})
     #TODO: handle errors
-
     roomData = RoomData.getRoomData(building)
     for room in roomData:
       room['reservationData'] = flipArray(ReservationData.GetAnonymizedReservationData(building, room['id'],currentDay,currentTimeSlot,email,'thisWeek') + ReservationData.GetAnonymizedReservationData(building, room['id'],0,0,email,'nextWeek'))
       room['statistics'] = flipArray(ReservationData.GetStatistics(building, room['id']))
     context.update({'rooms': roomData})
-  
+  else:
+    context.update({'reservationSuccess': False, 'reservationTimes': ''})
+    
   context.update({'roomID': roomID})
   try:
     time = request.POST.get('time')
@@ -91,4 +96,5 @@ def search(request, building = None, roomID = None):
   context.update({'building': building, 'email': email, 'time': time, 'time2': time2, 'day': day})
 
   
+  #print >>sys.stderr, context
   return render(request, "index.html", context) 

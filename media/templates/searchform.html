@@ -89,9 +89,12 @@
       </div>
     </div>
 </div>
-{% if reservationSuccess == True %}
-          succcesfully reserved room {{ roomID }}
-        {% endif %}  
+{% if reservationSuccess  %} 
+    <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Success!</strong> reserved room {{ roomID }} for following times:{{ reservationTimes }}
+    </div> 
+{% endif %}  
 <script type="text/javascript">
 $(function(){
     $("#search-form").validate({
