@@ -155,6 +155,7 @@ $(function(){
   $( document ).ready(function() {
     var val = $("#searchRoom").val().toUpperCase();
     roomDynamicFilter(val);
+    $("input[name='email']").val(Cookies.get('gaRemail'));
     timeSlotsPreselection();   
 });
   $("input[name*='time'], input[name*='time2']").change(function() {

@@ -83,6 +83,7 @@
     };
     $("#search-form")[0]["reserve"].value = roomID + ":" + reservations;
     $("#search-form").submit();
+    Cookies.set('gaRemail', $("input[name='email']").val(), { expires: 30, path: '/' });
   };
 
 </script>
