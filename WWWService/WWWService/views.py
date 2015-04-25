@@ -13,6 +13,7 @@ import ReservationData
 import time as tt
 import datetime
 import sys
+from django.core.mail import EmailMessage
 
 def flipArray(array):
   return map(list, zip(*array))
@@ -23,7 +24,7 @@ def clean(array):
   else:
     return array
     
-def search(request, building = None, roomID = None):
+def search(request, building = None, roomID = None, reserveEmail = None, reserveByEmail = None):
   localtime = tt.localtime()
   currentDay = datetime.datetime.now().weekday() # monday=0.. sunday=6
   currentTimeSlot = localtime[3] - 8
@@ -56,25 +57,54 @@ def search(request, building = None, roomID = None):
       times = filter(None, reserve[1].split(' '))
     except Exception as e:
       times = []
+    reservationTimes =''
+    for reservationTime in times:
+      day, slot = reservationTime.split(',')
+      reservationTimes += str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
+    ok = True
+    #print >>sys.stderr, times
+    if len(times) > 1:
+      mail = EmailMessage('Confirmation of room reservation', 'Click this link to confirm registration for these hours:' + reservationTimes[:-2]
+      + '\n  http://localhost:8000/' + building + '/' + roomID+ '/' + email + '/' + reserve[1].replace(' ','_') + ' ', to= [email] )
+      mail.send()
+      context.update({'reservationPending': len(times) > 0, 'reservationTimes': reservationTimes[:-2]})
+    else:
+      reservationFails =''
+      for reservationTime in times:
+        day, slot = reservationTime.split(',')
+        if not ReservationData.ReserveRoom(building, roomID, int(day), int(slot), email): 
+          reservationFails += str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
+          ok = False 
+      if ok:
+        context.update({'reservationSuccess': True, 'reservationTimes': reservationTimes[:-2]})
+      else:
+        context.update({'reservationFailure': True, 'reservationTimes': reservationFails[:-2]})
+    #TODO: handle errors
+  if reserveByEmail != None: 
+    email = reserveEmail
+    try:
+      times = filter(None, reserveByEmail.split('_'))
+    except Exception as e:
+      times = []
     ok = True
     #print >>sys.stderr, times
     reservationTimes =''
     for reservationTime in times:
       day, slot = reservationTime.split(',')
-      if ReservationData.ReserveRoom(building, roomID, int(day), int(slot), email):
+      if ReservationData.ReserveRoom(building, roomID, int(day), int(slot), reserveEmail):
         reservationTimes += str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
       else: 
         ok = False 
-    context.update({'reservationSuccess': ok and len(times) > 0, 'reservationTimes': reservationTimes[:-2]})
+    if ok:
+      context.update({'reservationSuccess': len(times) > 0, 'reservationTimes': reservationTimes[:-2]})
     #TODO: handle errors
+  if building != None:
     roomData = RoomData.getRoomData(building)
     for room in roomData:
       room['reservationData'] = flipArray(ReservationData.GetAnonymizedReservationData(building, room['id'],currentDay,currentTimeSlot,email,'thisWeek') + ReservationData.GetAnonymizedReservationData(building, room['id'],0,0,email,'nextWeek'))
       room['statistics'] = flipArray(ReservationData.GetStatistics(building, room['id']))
     context.update({'rooms': roomData})
-  else:
-    context.update({'reservationSuccess': False, 'reservationTimes': ''})
-    
+
   context.update({'roomID': roomID})
   try:
     time = request.POST.get('time')

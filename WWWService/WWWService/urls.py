@@ -8,17 +8,7 @@ from WWWService.views import *
 
 urlpatterns = patterns('',
     url(r'^$', 'WWWService.views.search'),
-    url(r'^([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)$', 'WWWService.views.search'),
-    # static version:
-    url(r'^$', 'django.views.generic.simple.direct_to_template', {'template': 'index.html'}),
-
-    # Examples:
-    # url(r'^$', 'WWWService.views.home', name='home'),
-    # url(r'^WWWService/', include('WWWService.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^([A-Za-z0-9_-]+)/([A-Za-z0-9_-]*)$', 'WWWService.views.search'),
+    url(r'^([A-Za-z0-9_-]+)/([A-Za-z0-9_-]+)/([\.\@A-Za-z0-9_-])+/([\,0-9_]+)$', 'WWWService.views.search'),
 )

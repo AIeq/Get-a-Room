@@ -168,3 +168,9 @@ LOGGING = {
         },
     }
 }
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'get.a.room.confirmation@gmail.com'
+EMAIL_HOST_PASSWORD = 'APmUEmwS'
+EMAIL_PORT = 587

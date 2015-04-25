@@ -83,7 +83,27 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong>Success!</strong> reserved room {{ roomID }} for following times:{{ reservationTimes }}
+        <strong>Success!</strong> Reserved room {{ roomID }} for following times: {{ reservationTimes }}.
+    </div> 
+   </div> 
+</div> 
+{% endif %}
+{% if reservationPending  %} 
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="alert alert-warning">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Registration pending</strong> Reserving room {{ roomID }} for following times: {{ reservationTimes }}. Click the confirmation email!
+    </div> 
+   </div> 
+</div> 
+{% endif %}
+{% if reservationFailed  %} 
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="alert alert-danger">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Registration failed</strong> Reserving room {{ roomID }} failed for following times: {{ reservationTimes }}!
     </div> 
    </div> 
 </div> 
