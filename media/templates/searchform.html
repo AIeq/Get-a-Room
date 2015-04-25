@@ -26,8 +26,7 @@
     <div class="col-md-8 col-md-offset-2">
       <div class="input-group input-group-lg">
           <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i> Room number</span>
-          <input id="searchRoom" name="roomID" type="text" class="form-control input-lg" placeholder="" value="{{ roomID }}">
-
+          <input id="searchRoom" name="roomID" type="text" class="form-control input-lg" placeholder="" value="{{ roomID|default_if_none:"" }}">
       </div>
     </div>
   </div>
@@ -131,6 +130,13 @@ $(function(){
 <script type="text/javascript">
   $("#searchRoom").keyup(function() {
     var val = $.trim(this.value).toUpperCase();
+    roomDynamicFilter(val);
+});
+  $( document ).ready(function() {
+    var val = $("#searchRoom").val().toUpperCase();
+    roomDynamicFilter(val);
+});
+  function roomDynamicFilter(val){
     var roomname;
       {% for room in rooms %}
         roomname = "Room " + $("#{{ room.id }}").text().toUpperCase();
@@ -143,5 +149,5 @@ $(function(){
             }).show();
         }
       {% endfor %}
-});
+  }
 </script>

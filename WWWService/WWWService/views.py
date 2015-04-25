@@ -78,14 +78,14 @@ def search(request, building = None, roomID = None):
   context.update({'roomID': roomID})
   try:
     time = request.POST.get('time')
-    time = int(time) 
+    time = str(int(time)) + ':00'
   except Exception as e:
-    time = localtime[3];
+    time = str(localtime[3]) + ':00';
   try:
     time2 = request.POST.get('time2')
-    time2 = int(time2) 
+    time2 = str(int(time2)) + ':00'
   except Exception as e:
-    time2 = localtime[3] + 1;
+    time2 = str(localtime[3] + 1) + ':00';
   try:
     day = request.POST.get('day') 
   except Exception as e:
