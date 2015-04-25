@@ -140,6 +140,7 @@ $(function(){
   $( document ).ready(function() {
     var val = $("#searchRoom").val().toUpperCase();
     roomDynamicFilter(val);
+    timeSlotsPreselection();   
 });
   function roomDynamicFilter(val){
     var roomname;
@@ -154,5 +155,10 @@ $(function(){
             }).show();
         }
       {% endfor %}
+  }
+  function timeSlotsPreselection(){
+    var daytime = $("input[name='time']").val().slice(0,$("input[name='time']").val().indexOf(":"))-8;
+    var weekday = new Date();
+    $("td[value*='"+(weekday.getDay()-1)+","+daytime+"']").toggleClass( "selected" );
   }
 </script>

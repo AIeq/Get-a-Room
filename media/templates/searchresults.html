@@ -22,7 +22,7 @@
       {% endfor %}
       <img src="{{ room.picture }}">
       <b>Free times:</b><br/>
-      <table id="{{ room.id }}_reservations" border="1" align="center">
+      <table calss = "reservations_tables" id="{{ room.id }}_reservations" border="1" align="center">
         <tr>  
           <td> </td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
         </tr>
@@ -44,7 +44,7 @@
         {% endfor %}
       </table> 
       <b>Statistics:</b><br/>
-      <table id="{{ room.id }}_reservations" border="1" style="width:220px" align="center">
+      <table id="{{ room.id }}_statistics" border="1" style="width:220px" align="center">
         <tr>  
           <td> </td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
         </tr>
