@@ -157,8 +157,11 @@ $(function(){
     roomDynamicFilter(val);
     timeSlotsPreselection();   
 });
-  $("input[name*='time']").change(function() {
+  $("input[name*='time'], input[name*='time2']").change(function() {
     $( ".selected" ).toggleClass( "selected" );
+    if ($("input[name='time']").val() >= $("input[name='time2']").val()) {
+      $("input[name='time2']").val((1*($("input[name='time']").val().slice(0,$("input[name='time']").val().indexOf(":")))+1)+":00");
+    }
     timeSlotsPreselection();
   });
   function roomDynamicFilter(val){
@@ -179,6 +182,10 @@ $(function(){
     var starttime = $("input[name='time']").val().slice(0,$("input[name='time']").val().indexOf(":"))-8;
     var endtime = $("input[name='time2']").val().slice(0,$("input[name='time2']").val().indexOf(":"))-8;
     var weekday = new Date();
-    $("td[value*='"+(weekday.getDay()-1)+","+starttime+"']").toggleClass( "selected" );
+    do {
+      $("td[value*='"+(weekday.getDay()-1)+","+starttime+"']").toggleClass( "selected" );
+      starttime++;
+    }
+    while (endtime-starttime > 1);
   }
 </script>
