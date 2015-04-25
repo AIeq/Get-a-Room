@@ -46,7 +46,7 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
       roomID = request.POST.get('roomID')
     except Exception as e:
       "nothing"
-  if email != '' and building != None:
+  if email != None and building != None:
     try:
       reserve = request.POST.get('reserve')
     except Exception as e:
@@ -86,9 +86,13 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
       times = filter(None, reserveByEmail.split('_'))
     except Exception as e:
       times = []
+    reservationTimes =''
+    for reservationTime in times:
+      day, slot = reservationTime.split(',')
+      reservationTimes += str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
     ok = True
     #print >>sys.stderr, times
-    reservationTimes =''
+    reservationFails =''
     for reservationTime in times:
       day, slot = reservationTime.split(',')
       if not ReservationData.ReserveRoom(building, roomID, int(day), int(slot), email): 
