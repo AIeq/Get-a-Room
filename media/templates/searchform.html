@@ -26,8 +26,7 @@
     <div class="col-md-8 col-md-offset-2">
       <div class="input-group input-group-lg">
           <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i> Room number</span>
-          <input id="searchRoom" name="roomID" type="text" class="form-control input-lg" placeholder="" value="{{ roomID }}">
-
+          <input id="searchRoom" name="roomID" type="text" class="form-control input-lg" placeholder="" value="{{ roomID|default_if_none:"" }}">
       </div>
     </div>
   </div>
