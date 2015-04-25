@@ -91,12 +91,13 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
     reservationTimes =''
     for reservationTime in times:
       day, slot = reservationTime.split(',')
-      if ReservationData.ReserveRoom(building, roomID, int(day), int(slot), reserveEmail):
-        reservationTimes += str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
-      else: 
+      if not ReservationData.ReserveRoom(building, roomID, int(day), int(slot), email): 
+        reservationFails += str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
         ok = False 
     if ok:
-      context.update({'reservationSuccess': len(times) > 0, 'reservationTimes': reservationTimes[:-2]})
+      context.update({'reservationSuccess': True, 'reservationTimes': reservationTimes[:-2]})
+    else:
+      context.update({'reservationFailure': True, 'reservationTimes': reservationFails[:-2]})
     #TODO: handle errors
   if building != None:
     roomData = RoomData.getRoomData(building)
