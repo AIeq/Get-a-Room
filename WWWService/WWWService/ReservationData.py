@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from copy import deepcopy
+import random
 emptyDay = ['','','','','','','','','','','','',]
 emptyWeek = [deepcopy(emptyDay),deepcopy(emptyDay),deepcopy(emptyDay),
     deepcopy(emptyDay),deepcopy(emptyDay),deepcopy(emptyDay),deepcopy(emptyDay),]
@@ -57,7 +58,18 @@ def chunks(l, n):
 slotsInDay = 12
 emptyWeekString = ',' * (7*slotsInDay-1)
 emptyStatisticWeekString = '0,' * (7*slotsInDay-1) + '0'
-
+def generateDummyStatistics():
+  statisticsString = ''
+  for d in range(7):
+    for t in range(12):
+      rushhour1 = 2 + 2 * int(d > 4)
+      peak1 = 3-abs(t - rushhour1) / 6.0;
+      rushhour2 = 10 - 2 * int(d > 4)
+      peak2 = 5-abs(t - rushhour2) / 5.0; 
+      peak = max(0.2, peak1, peak2)
+      uses = random.uniform(peak*0.6, peak)
+      statisticsString += str(int(100*uses)) + ','
+  return statisticsString[:-1]
   
 def getReservationObject(room):
   try:
@@ -68,7 +80,7 @@ def getReservationObject(room):
       lastWeek = emptyWeekString,
       thisWeek = emptyWeekString,
       nextWeek = emptyWeekString,
-      statistics = emptyStatisticWeekString,
+      statistics = generateDummyStatistics(),
       )
     res.save()
     return res

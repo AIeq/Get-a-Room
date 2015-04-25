@@ -26,19 +26,19 @@ import sys
 if Building.objects.all().count() == 0:
   k = Building(name='Kirjasto', description='Aalto main library')
   k.save()
-  Room(building = k, roomID = '112a',location = 'first floor',size = 6,type = 'meeting room',features = 'Two tables, Projector',insights = '',picture = '112a.jpg',).save()
-  Room(building = k, roomID = '112b',location = 'first floor',size = 6,type = 'meeting room',features = 'Two tables, Projector',insights = '',picture = '112b.jpg',).save()
-  Room(building = k, roomID = '243a',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243a.jpg',).save()
-  Room(building = k, roomID = '243b',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243b.jpg',).save()
+  Room(building = k, roomID = '112a',location = 'first floor',size = 6,type = 'meeting room',features = 'Two tables, Projector',insights = '',picture = '112a.jpg',map = 'map.jpg',).save()
+  Room(building = k, roomID = '112b',location = 'first floor',size = 6,type = 'meeting room',features = 'Two tables, Projector',insights = '',picture = '112b.jpg',map = 'map.jpg',).save()
+  Room(building = k, roomID = '243a',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243a.jpg',map = 'map.jpg',).save()
+  Room(building = k, roomID = '243b',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243b.jpg',map = 'map.jpg',).save()
   
   m = Building(name='Maarintalo', description='Utility house')
   m.save()
-  Room(building = m, roomID = '142a',location = 'second floor',size = 6,type = 'meeting room',features = 'Two tables, Projector',insights = '',picture = '142a.jpg',).save()
-  Room(building = m, roomID = '142b',location = 'second floor',size = 6,type = 'meeting room',features = 'Two tables, Projector',insights = '',picture = '142b.jpg',).save()
-  Room(building = m, roomID = '143a',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '143a.jpg',).save()
-  Room(building = m, roomID = '143b',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '143b.jpg',).save()
-  Room(building = m, roomID = '243a',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243a.jpg',).save()
-  Room(building = m, roomID = '243b',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243b.jpg',).save()
+  Room(building = m, roomID = '142a',location = 'second floor',size = 6,type = 'meeting room',features = 'Two tables, Projector',insights = '',picture = '142a.jpg',map = 'map.jpg',).save()
+  Room(building = m, roomID = '142b',location = 'second floor',size = 6,type = 'meeting room',features = 'Two tables, Projector',insights = '',picture = '142b.jpg',map = 'map.jpg',).save()
+  Room(building = m, roomID = '143a',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '143a.jpg',map = 'map.jpg',).save()
+  Room(building = m, roomID = '143b',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '143b.jpg',map = 'map.jpg',).save()
+  Room(building = m, roomID = '243a',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243a.jpg',map = 'map.jpg',).save()
+  Room(building = m, roomID = '243b',location = 'second floor',size = 4,type = 'work room',features = 'table',insights = '',picture = '243b.jpg',map = 'map.jpg',).save()
 
 def getBuildings():
   result = []

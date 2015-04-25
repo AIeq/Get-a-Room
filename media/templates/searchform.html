@@ -90,10 +90,14 @@
     </div>
 </div>
 {% if reservationSuccess  %} 
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
     <div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
         <strong>Success!</strong> reserved room {{ roomID }} for following times:{{ reservationTimes }}
     </div> 
+   </div> 
+</div> 
 {% endif %}  
 <script type="text/javascript">
 $(function(){
