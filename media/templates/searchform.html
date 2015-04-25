@@ -132,6 +132,13 @@ $(function(){
 <script type="text/javascript">
   $("#searchRoom").keyup(function() {
     var val = $.trim(this.value).toUpperCase();
+    roomDynamicFilter(val);
+});
+  $( document ).ready(function() {
+    var val = $("#searchRoom").val().toUpperCase();
+    roomDynamicFilter(val);
+});
+  function roomDynamicFilter(val){
     var roomname;
       {% for room in rooms %}
         roomname = "Room " + $("#{{ room.id }}").text().toUpperCase();
@@ -144,5 +151,5 @@ $(function(){
             }).show();
         }
       {% endfor %}
-});
+  }
 </script>
