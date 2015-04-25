@@ -17,6 +17,7 @@ class Room(models.Model):
     features = models.CharField(max_length=200, blank=True)
     insights = models.CharField(max_length=200, blank=True)
     picture = models.CharField(max_length=200, blank=True)
+    map = models.CharField(max_length=200, blank=True)
     class Meta:
         unique_together = (("building", "roomID"),)
     def __unicode__(self):
@@ -29,10 +30,10 @@ class Email(models.Model):
 
 class Reservation(models.Model):
     room = models.ForeignKey(Room, primary_key=True)
-    lastWeek = models.CharField(max_length=615) # 7 * 8 * (10 +1 )
-    thisWeek = models.CharField(max_length=615)
-    nextWeek = models.CharField(max_length=615)
-    statistics = models.CharField(max_length=615)
+    lastWeek = models.CharField(max_length=924) # 7 * 12 * (10 + 1)
+    thisWeek = models.CharField(max_length=924)
+    nextWeek = models.CharField(max_length=924)
+    statistics = models.CharField(max_length=924)
     def __unicode__(self):
        return 'Reservation: ' + self.room.building.name + " " + self.room.roomID
     
