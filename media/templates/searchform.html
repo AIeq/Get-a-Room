@@ -30,16 +30,6 @@
       </div>
     </div>
   </div>
-  <!--
-
-<input id="searchRoom" name="roomID" type="text" class="form-control input-lg" placeholder="" value="{{ roomID }}">
-
-  <div class="row">
-    <div class="col-md-8 col-md-offset-2">
-      <button type="submit" class="btn btn-default submit-btn pull-right">Search</button>
-    </div>
-  </div>
-  -->
 </form>
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
@@ -93,7 +83,27 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong>Success!</strong> reserved room {{ roomID }} for following times:{{ reservationTimes }}
+        <strong>Success!</strong> Reserved room {{ roomID }} for following times: {{ reservationTimes }}.
+    </div> 
+   </div> 
+</div> 
+{% endif %}
+{% if reservationPending  %} 
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="alert alert-warning">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Registration pending</strong> Reserving room {{ roomID }} for following times: {{ reservationTimes }}. Click the confirmation email!
+    </div> 
+   </div> 
+</div> 
+{% endif %}
+{% if reservationFailure  %} 
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="alert alert-danger">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Registration failed</strong> Reserving room {{ roomID }} failed for following times: {{ reservationTimes }}!
     </div> 
    </div> 
 </div> 
@@ -119,6 +129,11 @@ $(function(){
         }
     });
 });
+</script>
+<script type="text/javascript">
+  jQuery('#searchRoom').on('input', function() {
+      history.replaceState({}, document.title, '/{{ building }}/' + jQuery('#searchRoom')[0].value);
+  }); 
 </script>
 <script type="text/javascript">
   function resetValues(){

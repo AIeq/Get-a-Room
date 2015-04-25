@@ -1,6 +1,6 @@
 
 {% for building in buildings %}  
-  <form id="search-form-{{ building.name }}" class="form-horizontal" role="form" method="post" action="">
+  <form id="search-form-{{ building.name }}" class="form-horizontal" role="form" method="post" action="/{{ building.name }}/">
     {% csrf_token %}
     <input name="building" type="hidden" class="required form-control input-lg" placeholder="building" value="{{ building.name }}">
     <div class="row">
