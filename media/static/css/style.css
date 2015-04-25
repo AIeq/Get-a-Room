@@ -41,3 +41,9 @@ td {
     width:6%;
     position:relative;
 }
+
+.input-group-addon.label-info.panel-info {
+	color: #fff;
+	background-color: #337ab7;
+	border-color: grey;
+}

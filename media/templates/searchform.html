@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="input-group input-group-lg">
-          <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i> Email</span>
+          <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i><div style="width:50px" align="center">Email</div></span>
           <input name="email" type="email" class="required form-control input-lg" placeholder="email" value="{{ email }}">
       </div>
     </div>
@@ -13,7 +13,7 @@
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="input-group input-group-lg">
-          <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i> Time</span>
+          <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i><div style="width:50px" align="center">Time</div></span>
           <input name="time" type="time" class="required form-control input-lg" placeholder="time" value="{{ time }}">
           <span class="input-group-addon">-</span>
           <input name="time2" type="time" class="required form-control input-lg" placeholder="time2" value="{{ time2 }}">
@@ -25,7 +25,7 @@
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
       <div class="input-group input-group-lg">
-          <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i> Room number</span>
+          <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i><div style="width:50px" align="center">Room</div></span>
           <input id="searchRoom" name="roomID" type="text" class="form-control input-lg" placeholder="" value="{{ roomID|default_if_none:"" }}">
       </div>
     </div>
@@ -167,7 +167,7 @@ $(function(){
   function roomDynamicFilter(val){
     var roomname;
       {% for room in rooms %}
-        roomname = "Room " + $("#{{ room.id }}").text().toUpperCase();
+        roomname = "Room" + $("#{{ room.id }}").text().toUpperCase();
         if (val === "")
             $("#{{ room.id }}").show();
         else {
