@@ -1,26 +1,14 @@
 {% for room in rooms %} 
 <div class="row" id="{{ room.id }}">
-    <div class="col-md-4 col-md-offset-4">
+    <div class="col-md-6 col-md-offset-3">
 <div class="text-center  span4 collapse-group panel panel-primary">
     <div class="panel-heading">
     <b>Room {{ room.id }}</b>
-    <button type="" class="btn btn-success col-md-offset-1" onclick="reserve('{{ room.id }}')">Reserve</button>
+    <button type="" class="btn btn-success col-md-offset-6" onclick="reserve('{{ room.id }}')">Reserve</button>
     </div>
     <div class="panel-body">
-      <p><a class=" btn" href="#">View details &darr;</a></p>
+      <p><a class="btn" href="#">View details &darr;</a></p>
       <div class="text-left collapse">
-      <b>{{ room.type }} for </b><br/>
-      {{ room.size }} persons<br/>
-      <b>location:</b> {{ room.location }}<br/>
-      <b>features:</b> <br/>
-      {% for feature in room.features  %}   
-        * {{ feature }}<br/>
-      {% endfor %} 
-      <b>insights:</b> <br/>
-      {% for insight in room.insights  %}   
-        * {{ insight }}<br/>
-      {% endfor %}
-      <img src="{{ room.picture }}">
       <b>Free times:</b><br/>
       <table calss = "reservations_tables" id="{{ room.id }}_reservations" border="1" align="center">
         <tr>  
@@ -42,7 +30,19 @@
           {% endfor %}
         </tr>
         {% endfor %}
-      </table> 
+      </table>
+      <b>{{ room.type }} for </b><br/>
+      {{ room.size }} persons<br/>
+      <b>location:</b> {{ room.location }}<br/>
+      <b>features:</b> <br/>
+      {% for feature in room.features  %}   
+        * {{ feature }}<br/>
+      {% endfor %} 
+      <b>insights:</b> <br/>
+      {% for insight in room.insights  %}   
+        * {{ insight }}<br/>
+      {% endfor %}
+      <img src="{{ room.picture }}">
       <b>Statistics:</b><br/>
       <table id="{{ room.id }}_statistics" border="1" style="width:220px" align="center">
         <tr>  
