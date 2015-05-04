@@ -23,13 +23,6 @@ def clean(array):
     return[] 
   else:
     return array
-    
-def getReservationTimes(times):
-  reservationTimes =''
-  for reservationTime in times:
-    day, slot = reservationTime.split(',')
-    reservationTimes += str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
-  return reservationTimes[:-2]
   
 def reserveTimes(building, roomID, email, times):
   reservationFails =''
@@ -69,14 +62,15 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
     try:
       reserve = reserve.split(':')
       roomID = reserve[0]
-      if roomID == 'manageReservations':
-        roomID = ''
-        Emails.sendReservationsEmail(building, email)
-        context.update({'manageReservations': True})
       times = filter(None, reserve[1].split(' '))
     except Exception as e:
       times = []
-    reservationTimes = getReservationTimes(times)
+    if roomID == 'manageReservations':
+        roomID = ''
+        Emails.sendReservationsEmail(building, email)
+        context.update({'manageReservations': True})
+
+    reservationTimes = ReservationData.getReservationTimes(times)
     ok = True
     #print >>sys.stderr, times
     if len(times) > 1 and not Emails.emailFoundInDatabase(email):
@@ -96,7 +90,7 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
     #print >>sys.stderr, times
     reservationFails = reserveTimes(building, roomID, email, times)
     if reservationFails == '':
-      context.update({'reservationSuccess': True, 'reservationTimes': getReservationTimes(times)})
+      context.update({'reservationSuccess': True, 'reservationTimes': ReservationData.getReservationTimes(times)})
     else:
       context.update({'reservationFailure': True, 'reservationTimes': reservationFails})
     #TODO: handle errors

@@ -2,54 +2,10 @@
 
 from copy import deepcopy
 import random
-emptyDay = ['','','','','','','','','','','','',]
-emptyWeek = [deepcopy(emptyDay),deepcopy(emptyDay),deepcopy(emptyDay),
-    deepcopy(emptyDay),deepcopy(emptyDay),deepcopy(emptyDay),deepcopy(emptyDay),]
-emptyRoom = {'nextWeek': deepcopy(emptyWeek),
-    'thisWeek': deepcopy(emptyWeek),
-    'lastWeek': deepcopy(emptyWeek),
-    'statistics': [
-    [0,0,0,0,0,0,0,0,0,0,0,0,],[0,0,0,0,0,0,0,0,0,0,0,0,],
-    [0,0,0,0,0,0,0,0,0,0,0,0,],[0,0,0,0,0,0,0,0,0,0,0,0,],
-    [0,0,0,0,0,0,0,0,0,0,0,0,],[0,0,0,0,0,0,0,0,0,0,0,0,],
-    [0,0,0,0,0,0,0,0,0,0,0,0,],],}
-dummyRoom = {'nextWeek': [
-    ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
-    ['','','','','','','hello@aalto.fi','','','','','',],['','','','','','','','','','','','',],
-    ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
-    ['','','','','','','','','','','','',],],
-    'thisWeek': [
-    ['','','','','','','','','','hello@aalto.fi','','',],['','','','','','','','','','','','',],
-    ['','','','','','','','','','','','',],['','','','','','','','','','','','',],
-    ['','','','','','','','','','','','',],['','','','','hello@aalto.fi','','','','','','','',],
-    ['','','','','','','','','','','','',],],
-    'lastWeek': deepcopy(emptyWeek),
-    'statistics': [
-    [0,1,2,2,1,0,0,0,0,1,1,0,],[0,1,0,0,2,3,3,0,0,0,2,0,],
-    [0,0,4,4,0,0,1,0,0,2,2,0,],[0,0,1,2,0,2,0,3,0,0,2,0,],
-    [0,0,0,3,3,0,0,0,0,0,0,0,],[0,0,0,0,0,0,0,1,3,3,2,0,],
-    [0,0,0,0,0,0,0,0,1,1,0,0,],],}
- 
-data1 = {
-  '112a':deepcopy(emptyRoom),
-  '112b':deepcopy(dummyRoom),
-  '243a':deepcopy(emptyRoom),
-  '243b':deepcopy(emptyRoom),
-  }
-  
-data2 = {
-  '142a':deepcopy(emptyRoom),
-  '142b':deepcopy(dummyRoom),
-  '143a':deepcopy(emptyRoom),
-  '143b':deepcopy(emptyRoom),
-  '243a':deepcopy(emptyRoom),
-  '243b':deepcopy(emptyRoom),
-  }
-
-buildings = {'Kirjasto': data1, 'Maarintalo': data2}
-
+from rooms.models import Building
 from rooms.models import Room
 from rooms.models import Reservation
+
 import sys
 def chunks(l, n):
     n = max(1, n)
@@ -93,7 +49,6 @@ def GetReservationData(building, roomID):
   data = DeSerialize(getReservationObject(room))
   #print >>sys.stderr, data
   return data
-  #return buildings[building][roomID]# this version will just return static list
   
 def DeSerialize(res):
   result ={
@@ -191,4 +146,33 @@ def EndWeek():
         lastWeek[timeSlot] = thisWeek[timeSlot]
         thisWeek[timeSlot] = nextWeek[timeSlot]
         nextWeek[timeSlot] = ''
+        
+def findAllReservations(email):
+  reservations = {}
+  for building in Building.objects.all():
+    rooms ={}
+    for room in Room.objects.filter(building=building):
+      d = DeSerialize(getReservationObject(room))
+      reservationTimes = []
+      for day, thisWeek,  in enumerate(d['thisWeek']):
+        for timeSlot, _ in enumerate(thisWeek):
+          if thisWeek[timeSlot] == email:
+            reservationTimes.append(str(day) + ',' + str(timeSlot))
+      for day, nextWeek,  in enumerate(d['nextWeek']):
+        for timeSlot, _ in enumerate(nextWeek):
+          if nextWeek[timeSlot] == email:
+            reservationTimes.append(str(day + 7) + ',' + str(timeSlot))    
+          
+      if len(reservationTimes) > 0:
+        rooms[room.roomID] = reservationTimes
+    if len(rooms) > 0:
+      reservations[building.name] = rooms
+  return reservations
   
+def getReservationTimes(times):
+  dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+  reservationTimes =''
+  for reservationTime in times:
+    day, slot = reservationTime.split(',')
+    reservationTimes += dayNames[int(day)] + ' ' + str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
+  return reservationTimes[:-2] 
