@@ -69,6 +69,10 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
     try:
       reserve = reserve.split(':')
       roomID = reserve[0]
+      if roomID == 'manageReservations':
+        roomID = ''
+        Emails.sendReservationsEmail(building, email)
+        context.update({'manageReservations': True})
       times = filter(None, reserve[1].split(' '))
     except Exception as e:
       times = []
@@ -84,6 +88,7 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
         context.update({'reservationSuccess': len(times) > 0, 'reservationTimes': reservationTimes})
       else:
         context.update({'reservationFailure': True, 'reservationTimes': reservationFails})
+
     #TODO: handle errors
   if email == None and reserveByEmail != None: 
     email = reserveEmail

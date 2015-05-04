@@ -21,8 +21,7 @@ def sendConfirmationEmail(building, roomID, email, reservationTimes, timeCodes):
     + serverAddress + '/' + building + '/' + roomID + '/' + email + '/' + timeCodes.replace(' ','_'), to = [email] )
   mail.send()
 
-def sendReservationsEmail(building, roomID, email, reservationTimes, timeCodes):
+def sendReservationsEmail(building, email):
   mail = EmailMessage('Manage reservations',
-    'Click this link to confirm registration for these hours:' + reservationTimes + '\n'
-    + serverAddress + '/' + building + '/' + roomID + '/' + email + '/' + timeCodes.replace(' ','_'), to = [email] )
+    'Click these links to manage your registrations:' , to = [email] )
   mail.send()

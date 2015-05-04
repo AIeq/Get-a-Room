@@ -7,7 +7,9 @@
       <div class="input-group input-group-lg">
           <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i><div style="width:50px" align="center">Email</div></span>
           <input name="email" type="email" class="required form-control input-lg" placeholder="email" value="{{ email|default_if_none:"" }}">
-      </div>
+          <span class="input-group-addon"></span>
+          <button type="" class="form-control input-lg btn btn-success" onclick="manageReservations()">Manage reservations</button>
+    </div>
     </div>
   </div>
   <div class="row">
@@ -105,6 +107,16 @@
     <div class="alert alert-danger">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
         <strong>Registration failed</strong> Reserving room {{ roomID }} failed for following times: {{ reservationTimes }}!
+    </div> 
+   </div> 
+</div> 
+{% endif %}
+{% if manageReservations  %} 
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="alert alert-info">
+        <a href="#" class="close" data-dismiss="alert">&times;</a>
+        <strong>Manage reservations</strong> Sending email with reservation management options.
     </div> 
    </div> 
 </div> 
@@ -215,4 +227,12 @@ $(function(){
     while (endtime-selectedtime > 0);
 
   }
+</script>
+<script type="text/javascript">
+  function manageReservations() {
+    $("#search-form")[0]["reserve"].value = "manageReservations";
+    $("#search-form").submit();
+    Cookies.set('gaRemail', $("input[name='email']").val(), { expires: 30, path: '/' });
+  };
+
 </script>
