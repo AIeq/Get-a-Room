@@ -77,7 +77,7 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
     reservationTimes = ReservationData.getReservationTimes(timeCodes)
     ok = True
     #print >>sys.stderr, timeCodes
-    if len(timeCodes) > 1 and not Emails.emailFoundInDatabase(email):
+    if (len(timeCodes) > 1 or len(timeCodes) == 1 and len(ReservationData.findAllReservations(email)) > 0) and not Emails.emailFoundInDatabase(email):
       Emails.sendConfirmationEmail(building, roomID, email, reservationTimes, reserve[1])
       context.update({'reservationPending': True, 'reservationTimes': reservationTimes})
     else:
@@ -90,6 +90,7 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
     #TODO: handle errors
   if email == None and reserveByEmail != None: 
     email = reserveEmail
+    Emails.saveEmail(email)
     if reserveByEmail[0] != 'c':
       timeCodes = filter(None, reserveByEmail.split('_')) 
       #print >>sys.stderr, timeCodes

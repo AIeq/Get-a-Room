@@ -20,8 +20,9 @@ def emailFoundInDatabase(email):
     Email.objects.get(email=email)
     return True
   except Exception as e:
-    Email(email=email).save()
     return False
+def saveEmail(email):
+    Email(email=email).save()
 def createLink(building, roomID, email, timeCodes, msg):
   url =  serverAddress + '/' + building + '/' + roomID + '/' + email + '/' + timeCodes.replace(' ','_')
   return '<a href=" ' + url +'">' + msg + '</a>'
@@ -33,7 +34,6 @@ def sendConfirmationEmail(building, roomID, email, reservationTimes, timeCodes):
   mail.send()
 
 def sendReservationsEmail(building, email):
-  emailFoundInDatabase(email)
   reservations = ReservationData.findAllReservations(email)
   if len(reservations) > 0:
     msg = 'Click these links to manage your registrations:<br/>' + createLinks(reservations, email)
