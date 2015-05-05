@@ -79,9 +79,18 @@ def SetReservationData(building, roomID, d):
   res.nextWeek = nextWeekString[:-1]
   res.statistics = statisticsString[:-1]
   res.save();
-
-def GetAnonymizedReservationData(building, roomID, currenDay, currentTimeSlot, email, week):
-  "This queries reservation database and returns entries for a room in a building, removes emails"
+  
+import time as tt
+import datetime
+def GetAnonymizedReservationData(building, roomID, email):
+  "This queries reservation database and returns entries for a room in a building, removes emails" 
+  localtime = tt.localtime()
+  currentDay = datetime.datetime.now().weekday() # monday=0.. sunday=6
+  currentTimeSlot = localtime[3] - 8
+  return AnonymizeReservationData(building, roomID, currentDay, currentTimeSlot, email, 'thisWeek') +\
+    AnonymizeReservationData(building, roomID, 0, 0, email, 'nextWeek')
+    
+def AnonymizeReservationData(building, roomID, currentDay, currentTimeSlot, email, week):
   d = GetReservationData(building, roomID)
   #d = buildings['Kirjasto']['112a']
   
@@ -90,7 +99,7 @@ def GetAnonymizedReservationData(building, roomID, currenDay, currentTimeSlot, e
     reservations.append([])
     for timeSlot, _ in enumerate(week):
       if week[timeSlot] == '':
-        if day < currenDay or day == currenDay and timeSlot < currentTimeSlot:
+        if day < currentDay or day == currentDay and timeSlot < currentTimeSlot:
           reservations[day].append(0)
         else:
           reservations[day].append(1)
@@ -100,7 +109,6 @@ def GetAnonymizedReservationData(building, roomID, currenDay, currentTimeSlot, e
         reservations[day].append(3)
         
   return reservations
-  
 def GetStatistics(building, roomID):
   d = GetReservationData(building, roomID)
   statistics = deepcopy(d['statistics'])
@@ -110,6 +118,12 @@ def GetStatistics(building, roomID):
   return statistics
 
 def ReserveRoom(building, roomID, weekday, timeslot, email):
+  return changeEmail(building, roomID, weekday, timeslot, '', email)
+
+def ReleaseRoom(building, roomID, weekday, timeslot, email):
+  return changeEmail(building, roomID, weekday, timeslot, email, '')
+  
+def changeEmail(building, roomID, weekday, timeslot, expectedValue, newValue):
   "Timeslot is 0-12, 0 means from 8 to 9 am"
   if weekday < 7:
     week = 'thisWeek'
@@ -118,23 +132,15 @@ def ReserveRoom(building, roomID, weekday, timeslot, email):
     weekday -= 7
   d = GetReservationData(building, roomID)
   day = d[week][weekday]
-  if day[timeslot] == '':
-    day[timeslot] = email
+  #print >>sys.stderr, day[timeslot]
+  #print >>sys.stderr, expectedValue
+  #print >>sys.stderr, newValue
+  if day[timeslot] == expectedValue:
+    day[timeslot] = newValue
     SetReservationData(building, roomID, d)
     return True
   else:
     return False
-
-def ReleaseRoom(building, roomID, weekday, timeslot):
-  "Timeslot is 0-12, 0 means from 8 to 9 am"
-  if weekday < 7:
-    week = 'thisWeek'
-  else:
-    week = 'nextWeek'
-    weekday -= 7
-  d = GetReservationData(building, roomID)
-  d[week][weekday][timeslot] = ''
-  SetReservationData(building, roomID, d)
 
 
 def EndWeek():
@@ -169,10 +175,13 @@ def findAllReservations(email):
       reservations[building.name] = rooms
   return reservations
   
-def getReservationTimes(times):
-  dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+def getReservationTimes(timeCodes):
+  dayNames = [
+    'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday',
+    'Next weeks Monday','Next weeks Tuesday','Next weeks Wednesday',
+    'Next weeks Thursday','Next weeks Friday','Next weeks Saturday','Next weeks Sunday']
   reservationTimes =''
-  for reservationTime in times:
-    day, slot = reservationTime.split(',')
+  for timeCode in timeCodes:
+    day, slot = timeCode.split(',')
     reservationTimes += dayNames[int(day)] + ' ' + str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
   return reservationTimes[:-2] 

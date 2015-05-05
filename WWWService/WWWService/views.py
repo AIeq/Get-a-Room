@@ -10,10 +10,9 @@ import re
 import urllib2
 import RoomData
 import ReservationData
-import time as tt
-import datetime
 import sys
 import Emails
+import time as tt
 
 def flipArray(array):
   return map(list, zip(*array))
@@ -24,18 +23,23 @@ def clean(array):
   else:
     return array
   
-def reserveTimes(building, roomID, email, times):
+def reserveTimes(building, roomID, email, timeCodes):
   reservationFails =''
-  for reservationTime in times:
-    day, slot = reservationTime.split(',')
+  for timeCode in timeCodes:
+    day, slot = timeCode.split(',') 
     if not ReservationData.ReserveRoom(building, roomID, int(day), int(slot), email): 
-      reservationFails += str(int(slot)+8) + '-' +str(int(slot)+9) + ', '
+      reservationFails += ReservationData.getReservationTimes([timeCode]) + ', ' 
+  return reservationFails[:-2]
+  
+def cancelTimes(building, roomID, email, timeCodes):
+  reservationFails =''
+  for timeCode in timeCodes:
+    day, slot = timeCode.split(',')
+    if not ReservationData.ReleaseRoom(building, roomID, int(day), int(slot), email): 
+      reservationFails += ReservationData.getReservationTimes([timeCode]) + ', '
   return reservationFails[:-2]
   
 def search(request, building = None, roomID = None, reserveEmail = None, reserveByEmail = None):
-  localtime = tt.localtime()
-  currentDay = datetime.datetime.now().weekday() # monday=0.. sunday=6
-  currentTimeSlot = localtime[3] - 8
   context = {}
   context.update(csrf(request))  
   context.update({'buildings': RoomData.getBuildings()})
@@ -62,56 +66,65 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
     try:
       reserve = reserve.split(':')
       roomID = reserve[0]
-      times = filter(None, reserve[1].split(' '))
+      timeCodes = filter(None, reserve[1].split(' '))
     except Exception as e:
-      times = []
+      timeCodes = []
     if roomID == 'manageReservations':
         roomID = ''
         Emails.sendReservationsEmail(building, email)
         context.update({'manageReservations': True})
 
-    reservationTimes = ReservationData.getReservationTimes(times)
+    reservationTimes = ReservationData.getReservationTimes(timeCodes)
     ok = True
-    #print >>sys.stderr, times
-    if len(times) > 1 and not Emails.emailFoundInDatabase(email):
+    #print >>sys.stderr, timeCodes
+    if len(timeCodes) > 1 and not Emails.emailFoundInDatabase(email):
       Emails.sendConfirmationEmail(building, roomID, email, reservationTimes, reserve[1])
       context.update({'reservationPending': True, 'reservationTimes': reservationTimes})
     else:
-      reservationFails = reserveTimes(building, roomID, email, times)
+      reservationFails = reserveTimes(building, roomID, email, timeCodes)
       if reservationFails == '':
-        context.update({'reservationSuccess': len(times) > 0, 'reservationTimes': reservationTimes})
+        context.update({'reservationSuccess': len(timeCodes) > 0, 'reservationTimes': reservationTimes})
       else:
         context.update({'reservationFailure': True, 'reservationTimes': reservationFails})
 
     #TODO: handle errors
   if email == None and reserveByEmail != None: 
     email = reserveEmail
-    times = filter(None, reserveByEmail.split('_')) 
-    #print >>sys.stderr, times
-    reservationFails = reserveTimes(building, roomID, email, times)
-    if reservationFails == '':
-      context.update({'reservationSuccess': True, 'reservationTimes': ReservationData.getReservationTimes(times)})
+    if reserveByEmail[0] != 'c':
+      timeCodes = filter(None, reserveByEmail.split('_')) 
+      #print >>sys.stderr, timeCodes
+      reservationFails = reserveTimes(building, roomID, email, timeCodes)
+      if reservationFails == '':
+        context.update({'reservationSuccess': True, 'reservationTimes': ReservationData.getReservationTimes(timeCodes)})
+      else:
+        context.update({'reservationFailure': True, 'reservationTimes': reservationFails})
     else:
-      context.update({'reservationFailure': True, 'reservationTimes': reservationFails})
+      timeCodes = filter(None, reserveByEmail[1:].split('_'))
+      cancellationFails = cancelTimes(building, roomID, email, timeCodes)
+      if cancellationFails == '':
+        context.update({'cancellationSuccess': True, 'reservationTimes': ReservationData.getReservationTimes(timeCodes)})
+      else:
+        context.update({'cancellationFailure': True, 'reservationTimes': cancellationFails})
     #TODO: handle errors
   if building != None:
     roomData = RoomData.getRoomData(building)
     for room in roomData:
-      room['reservationData'] = flipArray(ReservationData.GetAnonymizedReservationData(building, room['id'],currentDay,currentTimeSlot,email,'thisWeek') + ReservationData.GetAnonymizedReservationData(building, room['id'],0,0,email,'nextWeek'))
+      room['reservationData'] = flipArray(ReservationData.GetAnonymizedReservationData(building, room['id'], email))
       room['statistics'] = flipArray(ReservationData.GetStatistics(building, room['id']))
     context.update({'rooms': roomData})
 
   context.update({'roomID': roomID})
+  timeNow = tt.localtime()[3]
   try:
     time = request.POST.get('time')
     time = str(int(time)) + ':00'
   except Exception as e:
-    time = str(localtime[3]) + ':00';
+    time = str(timeNow) + ':00';
   try:
     time2 = request.POST.get('time2')
     time2 = str(int(time2)) + ':00'
   except Exception as e:
-    time2 = str(localtime[3] + 1) + ':00';
+    time2 = str(timeNow + 1) + ':00';
   try:
     day = request.POST.get('day') 
   except Exception as e:
