@@ -19,9 +19,9 @@ def generateDummyStatistics():
   for d in range(7):
     for t in range(12):
       rushhour1 = 2 + 2 * int(d > 4)
-      peak1 = 3-abs(t - rushhour1) / 6.0;
+      peak1 = (3-abs(t - rushhour1)) / 6.0;
       rushhour2 = 10 - 2 * int(d > 4)
-      peak2 = 5-abs(t - rushhour2) / 5.0; 
+      peak2 = (5-abs(t - rushhour2)) / 5.0; 
       peak = max(0.2, peak1, peak2)
       uses = random.uniform(peak*0.6, peak)
       statisticsString += str(int(100*uses)) + ','
