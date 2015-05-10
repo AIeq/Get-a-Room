@@ -24,7 +24,7 @@ body {
 }
 
 .selected {
-    background: yellow;
+    background-color: yellow;
 }
 
 button.btn {
@@ -46,4 +46,9 @@ td {
 	color: #fff;
 	background-color: #337ab7;
 	border-color: grey;
+}
+
+.btn-notime {
+    background-color: grey;
+    border-color: grey;
 }
