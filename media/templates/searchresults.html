@@ -44,19 +44,57 @@
       {% endfor %}
       <img src="{{ room.picture }}">
       <b>Statistics:</b><br/>
+      <table style="width:280px; height:20px" align="center">
+      <caption style="text-align:center; color:black">Availability</caption>
+        <tr>
+          <td><b>+</b></td>
+          <td style="background-color: #0000b6"></td>
+          <td style="background-color: #0119ff"></td>
+          <td style="background-color: #0081ff"></td>
+          <td style="background-color: #00e5f8"></td>
+          <td style="background-color: #52ffa5"></td>
+          <td style="background-color: #a5ff52"></td>
+          <td style="background-color: #f7f500"></td>
+          <td style="background-color: #ff9400"></td>
+          <td style="background-color: #ff3800"></td>
+          <td style="background-color: #b60000"></td>
+          <td><b>-</b></td>
+        </tr>
+      </table><br/>
       <table id="{{ room.id }}_statistics" border="1" style="width:220px" align="center">
         <tr>  
-          <td> </td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td> 
+          <td> </td> <td>m</td> <td>t</td> <td>w</td> <td>t</td> <td>f</td> <td>s</td> <td>s</td>
         </tr>
         {% for slot in room.statistics  %}
         <tr>        
           <td>{{ forloop.counter0|add:"8" }}h</td> 
           {% for day in slot  %} 
-            <td>{{ day }}</td> 
+            <td
+            {% if day < 10 %}
+              style="background-color: #0000b6";
+            {% elif day < 20 %}
+              style="background-color: #0119ff";
+            {% elif day < 30 %}
+              style="background-color: #0081ff";
+            {% elif day < 40 %}
+              style="background-color: #00e5f8";
+            {% elif day < 50 %}
+              style="background-color: #52ffa5";
+            {% elif day < 60 %}
+              style="background-color: #a5ff52";
+            {% elif day < 70 %}
+              style="background-color: #f7f500";
+            {% elif day < 80 %}
+              style="background-color: #ff9400";
+            {% elif day < 90 %}
+              style="background-color: #ff3800";
+            {% else %}
+              style="background-color: #b60000";
+            {% endif %}></td>
           {% endfor %}
         </tr>
         {% endfor %}
-      </table> 
+      </table>
       </div>
       </div>
       </div>
