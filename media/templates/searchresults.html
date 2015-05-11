@@ -168,5 +168,9 @@ function myFunction() {
 <script type="text/javascript">
 $( ".free" ).click(function() {
   $( this ).toggleClass( "selected" );
+  $( this ).closest(".panel").find(".btn-success").toggleClass("btn-success").toggleClass("btn-notime").attr("disabled","disabled");
+  if ($( this ).closest(".reservations_tables").find(".selected").length > 0) {
+    $( this ).closest(".panel").find(".btn-notime").toggleClass("btn-notime").toggleClass("btn-success").removeAttr("disabled");
+  };
 });
 </script>
