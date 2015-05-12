@@ -2,7 +2,7 @@
 from django.core.mail import EmailMessage
 from rooms.models import Email
 import ReservationData
-import serverAddress
+from serverAddress import serverAddress
 import sys
 
 emailHeader = \
