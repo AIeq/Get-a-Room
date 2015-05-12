@@ -58,6 +58,8 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
       roomID = request.POST.get('roomID')
     except Exception as e:
       "nothing"
+      
+  timeCodes = []
   if email != None and building != None:
     try:
       reserve = request.POST.get('reserve')
@@ -110,7 +112,7 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
   if building != None:
     roomData = RoomData.getRoomData(building)
     for room in roomData:
-      room['reservationData'] = flipArray(ReservationData.GetAnonymizedReservationData(building, room['id'], email))
+      room['reservationData'] = flipArray(ReservationData.GetAnonymizedReservationData(building, room['id'], reserved = timeCodes))
       room['statistics'] = flipArray(ReservationData.GetStatistics(building, room['id']))
     context.update({'rooms': roomData})
 

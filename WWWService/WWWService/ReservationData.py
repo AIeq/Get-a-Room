@@ -31,7 +31,7 @@ def getReservationObject(room):
   try:
     return Reservation.objects.get(room=room)
   except Exception as e:
-    res =Reservation(
+    res = Reservation(
       room = room,
       lastWeek = emptyWeekString,
       thisWeek = emptyWeekString,
@@ -51,7 +51,7 @@ def GetReservationData(building, roomID):
   return data
   
 def DeSerialize(res):
-  result ={
+  result = {
       'lastWeek' : chunks(res.lastWeek.split(','), slotsInDay),
       'thisWeek' : chunks(res.thisWeek.split(','), slotsInDay),
       'nextWeek' : chunks(res.nextWeek.split(','), slotsInDay),
@@ -82,15 +82,16 @@ def SetReservationData(building, roomID, d):
   
 import time as tt
 import datetime
-def GetAnonymizedReservationData(building, roomID, email):
+def GetAnonymizedReservationData(building, roomID, email = None, reserved = None):
   "This queries reservation database and returns entries for a room in a building, removes emails" 
   localtime = tt.localtime()
   currentDay = datetime.datetime.now().weekday() # monday=0.. sunday=6
   currentTimeSlot = localtime[3] - 8
-  return AnonymizeReservationData(building, roomID, currentDay, currentTimeSlot, email, 'thisWeek') +\
-    AnonymizeReservationData(building, roomID, 0, 0, email, 'nextWeek')
+  return AnonymizeReservationData(building, roomID, currentDay, currentTimeSlot, email, reserved, 'thisWeek') +\
+    AnonymizeReservationData(building, roomID, 0, 0, email, reserved, 'nextWeek')
     
-def AnonymizeReservationData(building, roomID, currentDay, currentTimeSlot, email, week):
+def AnonymizeReservationData(building, roomID, currentDay, currentTimeSlot, email, reserved, week):
+  nextWeekOffset = 7 * int(week == 'nextWeek')
   d = GetReservationData(building, roomID)
   #d = buildings['Kirjasto']['112a']
   
@@ -103,12 +104,12 @@ def AnonymizeReservationData(building, roomID, currentDay, currentTimeSlot, emai
           reservations[day].append(0)
         else:
           reservations[day].append(1)
-      elif week[timeSlot] == email:
+      elif week[timeSlot] == email or any(r == str(day + nextWeekOffset) + ',' + str(timeSlot) for r in reserved) :
         reservations[day].append(2)
       else:
-        reservations[day].append(3)
-        
+        reservations[day].append(3)        
   return reservations
+  
 def GetStatistics(building, roomID):
   d = GetReservationData(building, roomID)
   statistics = deepcopy(d['statistics'])
