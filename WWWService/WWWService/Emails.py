@@ -2,9 +2,9 @@
 from django.core.mail import EmailMessage
 from rooms.models import Email
 import ReservationData
+import serverAddress.py
 import sys
 
-serverAddress = 'http://localhost:8000'
 emailHeader = \
   '<html><body>' + \
   '&nbsp;&nbsp;<b>Get-a-Room</b><br/>' + \
