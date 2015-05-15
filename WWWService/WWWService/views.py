@@ -123,18 +123,22 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
     time = request.POST.get('time')
     time = str(int(time)) + ':00'
   except Exception as e:
-    time = str(timeNow) + ':00';
+    time = str(timeNow) + ':00'
   try:
     time2 = request.POST.get('time2')
     time2 = str(int(time2)) + ':00'
   except Exception as e:
-    time2 = str(timeNow + 1) + ':00';
+    time2 = str(timeNow + 1) + ':00'
   try:
     day = request.POST.get('day') 
   except Exception as e:
     day = 'today'
   if day is None:
     day = 'today'
+  if len(time) == 4:
+    time = '0' + time
+  if len(time2) == 4:
+    time2 = '0' + time2
   #maxday goes until sunday next week
   maxday = str(date.today()+timedelta(days=13-date.weekday(date.today())))
   
