@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.utils.translation import ugettext as _
 from django.core.context_processors import csrf
+from datetime import date, timedelta
 import re
 import urllib2
 import RoomData
@@ -134,8 +135,10 @@ def search(request, building = None, roomID = None, reserveEmail = None, reserve
     day = 'today'
   if day is None:
     day = 'today'
+  #maxday goes until sunday next week
+  maxday = str(date.today()+timedelta(days=13-date.weekday(date.today())))
   
-  context.update({'building': building, 'email': email, 'time': time, 'time2': time2, 'day': day})
+  context.update({'building': building, 'email': email, 'time': time, 'time2': time2, 'day': day, 'maxday': maxday})
 
   
   #print >>sys.stderr, context
