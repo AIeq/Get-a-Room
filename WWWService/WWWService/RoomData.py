@@ -52,7 +52,7 @@ def getRoomData(building):
   result = []
   for room in Room.objects.filter(building=building):
     r = {'id': room.roomID, 'location': room.location, 'size': room.size, 'type': room.type,
-    'features': filter(None, room.features.split(',')), 'insights': filter(None, room.insights.split(',')), 'picture': room.picture}
+    'features': filter(None, room.features.split(',')), 'insights': filter(None, room.insights.split(',')), 'picture': room.picture, 'map': room.map}
     #print >>sys.stderr, r
     result += [r]
   return result
