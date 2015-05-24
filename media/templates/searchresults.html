@@ -31,19 +31,27 @@
         </tr>
         {% endfor %}
       </table>
-      <b>{{ room.type }} for </b><br/>
-      {{ room.size }} persons<br/>
-      <b>location:</b> {{ room.location }}<br/>
-      <b>features:</b> <br/>
-      {% for feature in room.features  %}   
-        * {{ feature }}<br/>
-      {% endfor %} 
-      <b>insights:</b> <br/>
-      {% for insight in room.insights  %}   
-        * {{ insight }}<br/>
-      {% endfor %}
-      <img src="{{ room.map }}" style="width:200px" align="center">
-      <img src="{{ room.picture }}" style="width:200px" align="center">
+
+      <dl>
+        <dt>Room type:</dt>
+        <dd>{{ room.type }} for {{ room.size }} persons</dd>
+        <dd align="center"><img src="{{ room.picture }}" style="width:75%"></dd>
+        <dt>Location:</dt>
+        <dd>{{ room.location }}</dd>
+        <dt>Features:</dt>
+        {% for feature in room.features  %}   
+          <dd>- {{ feature }}</dd>
+        {% endfor %}
+        <dt>Insights:</dt>
+        {% for insight in room.insights  %}   
+          <dd>- {{ insight }}</dd>
+        {% endfor %}
+        <dt>Where is the room?</dt>
+        <dd align="center"><img src="{{ room.map }}" style="width:75%"></dd>
+      </dl>
+
+      
+      
             
       <table style="width:220px; height:20px" align="center">
       <caption style="text-align:center; color:black"><b>Availability</b></caption>
@@ -139,25 +147,24 @@ function myFunction() {
     {% for room in rooms %}
       if (("{{ room.type }}" == x.value || x.value == "All") && ("{{ room.location }}" == y.value || y.value == "All") && ("{{ room.size }}" == z.value || z.value == "All")){
 
-        $("#{{ room.id }}").show();
-
         flag1 = false;
         falg2 = false;
+        $("#{{ room.id }}").hide();
+        if (tab2.checked || proj.checked) {
         {% for feature in room.features  %}
-          if ("{{ feature }}" == "Two tables") {
-            flag1 = true;
+          if (("{{ feature }}" == "Two tables") && tab2.checked == true) {
+            $("#{{ room.id }}").show();
           }
-          if ("{{ feature }}" == "Projector") {
-            flag2 = true;
+          if (("{{ feature }}" == " Projector") && proj.checked == true) {
+            $("#{{ room.id }}").show();
           }
         {% endfor %}
 
-        if ((tab2.checked == true) && (flag1 == false)){
-          $("#{{ room.id }}").hide();
-        }
-        if ((proj.checked == true) && (flag2 == false)){
-          $("#{{ room.id }}").hide();
-        }
+      }
+      else {
+        $("#{{ room.id }}").show();
+      }
+
       }
       else {
         $("#{{ room.id }}").hide();
