@@ -3,12 +3,12 @@
 <input name="building" type="hidden" class="required form-control input-lg" placeholder="building" value="{{ building }}">
 <input name="reserve" type="hidden" class="required form-control input-lg" placeholder="reserve" value="">
   <div class="row">
-    <div class="col-md-8 col-xs-6 col-md-offset-2">
+    <div class="col-md-8 col-md-offset-2">
       <div class="input-group input-group-lg">
           <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i><div style="width:50px" align="center">Email</div></span>
           <input name="email" type="email" class="required form-control input-lg" placeholder="email" value="{{ email|default_if_none:"" }}">
-          <span class="input-group-addon"></span>
-          <button type="" class="form-control input-lg btn btn-success" onclick="manageReservations()">Manage reservations</button>
+          
+          <button type="" class="form-control input-lg btn btn-info" onclick="manageReservations()">Manage reservations</button>
     </div>
     </div>
   </div>
@@ -16,11 +16,12 @@
     <div class="col-md-8 col-md-offset-2">
       <div class="input-group input-group-lg">
           <span class="input-group-addon label-info panel-info"><i class="fa fa-sign-out"></i><div style="width:50px" align="center">Time</div></span>
-          <input name="time" type="time" class="required form-control input-lg" placeholder="time" value="{{ time }}">
-          <span class="input-group-addon">-</span>
-          <input name="time2" type="time" class="required form-control input-lg" placeholder="time2" value="{{ time2 }}">
-          <span class="input-group-addon"></span>
-          <input name="day" type="date" class="required form-control input-lg" placeholder="day" value="{% now 'Y-m-d' %}" min="{% now 'Y-m-d' %}" max="{{ maxday }}">
+          
+          <input name="time" type="time" class="required form-control input-lg " placeholder="time" value="{{ time }}" style="width:50%; float:left">
+          
+          <input name="time2" type="time" class="required form-control input-lg" placeholder="time2" value="{{ time2 }}" style="width:50%; float:left">
+         
+          <input name="day" type="date" class="required form-control input-lg" placeholder="day" value="{% now 'Y-m-d' %}" min="{% now 'Y-m-d' %}" max="{{ maxday }}" style="width:100%; float:left">
 
 
 
