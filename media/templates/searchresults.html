@@ -4,10 +4,10 @@
 <div class="text-center  span4 collapse-group panel panel-primary">
     <div class="panel-heading">
     <b>Room {{ room.id }}</b>
-    <button type="" class="btn btn-success col-md-offset-6" onclick="reserve('{{ room.id }}')">Reserve</button>
+    <a class="btn col-md-offset-2" href="#" style="color:white">View details &darr;</a>
+    <button type="" class="btn btn-success col-md-offset-2" onclick="reserve('{{ room.id }}')">Reserve</button>
     </div>
     <div class="panel-body">
-      <p><a class="btn" href="#">View details &darr;</a></p>
       <div class="text-left collapse">
       <b>Free times:</b><br/>
       <table class = "reservations_tables" id="{{ room.id }}_reservations" border="1" align="center">
@@ -44,10 +44,10 @@
       {% endfor %}
       <img src="{{ room.picture }}">
       <b>Statistics:</b><br/>
-      <table style="width:280px; height:20px" align="center">
-      <caption style="text-align:center; color:black">Availability</caption>
+      <table style="width:220px; height:20px" align="center">
+      <caption style="text-align:center; color:black"><b>Availability</b></caption>
         <tr>
-          <td><b>+</b></td>
+          <td><b>Free&nbsp;</b></td>
           <td style="background-color: #0000b6"></td>
           <td style="background-color: #0119ff"></td>
           <td style="background-color: #0081ff"></td>
@@ -58,7 +58,7 @@
           <td style="background-color: #ff9400"></td>
           <td style="background-color: #ff3800"></td>
           <td style="background-color: #b60000"></td>
-          <td><b>-</b></td>
+          <td><b>&nbsp;Busy</b></td>
         </tr>
       </table><br/>
       <table id="{{ room.id }}_statistics" border="1" style="width:220px" align="center">

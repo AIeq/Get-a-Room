@@ -52,3 +52,11 @@ td {
     background-color: grey;
     border-color: grey;
 }
+
+div.panel-body {
+	padding: 0;
+}
+
+div.panel-body .collapse {
+	padding: 15px;
+}
