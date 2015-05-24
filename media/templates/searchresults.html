@@ -4,7 +4,7 @@
 <div class="text-center  span4 collapse-group panel panel-primary">
     <div class="panel-heading">
     <b>Room {{ room.id }}</b>
-    <a class="btn col-md-offset-2" href="#" style="color:white">View details &darr;</a>
+    <a class="btn col-md-offset-2 expandbutton" href="#" style="color:white">View details &darr;</a>
     <button type="" class="btn btn-success col-md-offset-2" onclick="reserve('{{ room.id }}')">Reserve</button>
     </div>
     <div class="panel-body">
@@ -104,7 +104,7 @@
 
 
 <script type="text/javascript">
-  $('.row .btn').on('click', function(e) {
+  $('.expandbutton').on('click', function(e) {
       e.preventDefault();
       var $this = $(this);
       var $collapse = $this.closest('.collapse-group').find('.collapse');
